@@ -22,4 +22,12 @@ public enum Attachment {
     public int getTo() {
         return to;
     }
+
+    public void connect(RoadSegment roadSegmentFrom, RoadSegment roadSegmentTo)  {
+        Intersection intersectionFrom = roadSegmentFrom.getIntersection(from);
+        RoadSegmentEnd roadSegmentEnd = new RoadSegmentEnd(roadSegmentTo, to);
+        intersectionFrom.addRoadSegmentEnd(roadSegmentEnd);
+        roadSegmentTo.updateIntersection(intersectionFrom, to);
+
+    }
 }

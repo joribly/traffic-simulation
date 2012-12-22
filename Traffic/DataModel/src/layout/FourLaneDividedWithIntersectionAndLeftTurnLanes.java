@@ -27,7 +27,7 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
                 new RoadPoint(rp1).dY(80.0),
                 new RoadPoint(rp1).dY(100.0));
 
-        roadSegment1.connect(roadSegment2, Attachment.BA);
+        Attachment.BA.connect(roadSegment1, roadSegment2);
 
         RoadPoint rp2 = new RoadPoint(rp1).dX(-40.0).dY(40.0).dA(90.0);
 
@@ -44,10 +44,10 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
                 new RoadPoint(rp2).dX(80.0),
                 new RoadPoint(rp2).dX(100.0));
 
-        roadSegment3.connect(roadSegment4, Attachment.BA);
+        Attachment.BA.connect(roadSegment3,roadSegment4);
 
-        roadSegment1.connect(roadSegment3, Attachment.BB);
-        roadSegment1.connect(roadSegment4, Attachment.BA);
+        Attachment.BB.connect(roadSegment1,roadSegment3);
+        Attachment.BA.connect(roadSegment1,roadSegment4);
 
         System.out.println(roadSegment1);
         System.out.println(roadSegment2);

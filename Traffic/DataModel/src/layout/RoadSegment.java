@@ -20,8 +20,8 @@ public class RoadSegment {
         intersections = new Intersection[2];
         layout = aLayout;
         addRoadPoints(points);
-        attachIntersection(A);
-        attachIntersection(B);
+        attachInitialIntersectionToEnd(A);
+        attachInitialIntersectionToEnd(B);
         id = ++_id;
     }
 
@@ -39,17 +39,17 @@ public class RoadSegment {
         }
     }
 
-    private void attachIntersection(int end) {
-        Intersection intersection = new Intersection();
-        intersection.addRoadSegmentEnd(new RoadSegmentEnd(this,end));
-        intersections[end] = intersection;
+    private void attachInitialIntersectionToEnd(int end) {
+        setEndIntersection(end, new Intersection());
     }
 
-    public void connect(RoadSegment roadSegment, Attachment attachment) {
-        RoadSegmentEnd roadSegmentEnd = new RoadSegmentEnd(roadSegment, attachment.getTo());
-        Intersection intersection = intersections[attachment.getFrom()];
-        intersection.addRoadSegmentEnd(roadSegmentEnd);
-        roadSegment.updateIntersection(intersection, attachment.getTo());
+    private void setEndIntersection(int end, Intersection intersection) {
+        intersections[end] = intersection;
+        intersections[end].addRoadSegmentEnd(new RoadSegmentEnd(this,end));
+    }
+
+    public Intersection getIntersection(int end) {
+        return intersections[end];
     }
 
     public String toString() {
