@@ -10,10 +10,6 @@ public class RoadPoint {
     Vector3D orientation;
     Point3d origin;
 
-    public RoadPoint() {
-
-    }
-
     public RoadPoint(RoadPoint roadPoint) {
         orientation = new Vector3D(roadPoint.orientation.getAlpha(), roadPoint.orientation.getDelta());
         origin = new Point3d(roadPoint.origin);

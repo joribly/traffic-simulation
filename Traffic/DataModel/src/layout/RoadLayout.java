@@ -44,10 +44,6 @@ public enum RoadLayout {
         }
     }
 
-    public int getNumberOfLanes() {
-        return count;
-    }
-
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(this.name() + " has " + count + " lanes \n");

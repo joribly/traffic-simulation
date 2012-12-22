@@ -11,23 +11,19 @@ public class Intersection {
         roadSegmentEndList = new ArrayList<RoadSegmentEnd>();
     }
 
-    public void addRoadSegmentEnd(RoadSegmentEnd roadSegmentEnd) {
-        roadSegmentEndList.add(roadSegmentEnd);
+    public void addRoadSegment(RoadSegment roadSegment, End end) {
+        roadSegmentEndList.add(new RoadSegmentEnd(roadSegment, end));
+        roadSegment.setEndIntersection(end, this);
     }
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(" connecting ");
+        sb.append(" connects to  ");
         for(RoadSegmentEnd roadSegmentEnd : roadSegmentEndList) {
-            sb.append(roadSegmentEnd + " ");
+            sb.append(roadSegmentEnd + ", ");
         }
         sb.append("\n");
         return sb.toString();
-    }
-
-    public void addRoadSegment(RoadSegment roadSegment, End end) {
-        addRoadSegmentEnd(new RoadSegmentEnd(roadSegment, end));
-        roadSegment.setEndIntersection(end, this);
     }
 
     static class RoadSegmentEnd {
@@ -40,7 +36,7 @@ public class Intersection {
         }
 
         public String toString() {
-            return roadSegment.getId() + " (" + end + ")";
+            return roadSegment.getId() + "-" + end;
         }
     }
 }

@@ -44,11 +44,10 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
                 new RoadPoint(rp2).dX(100.0));
 
         Intersection intersection = new Intersection();
-
-
+        // in order, e.g. clockwise
         intersection.addRoadSegment(roadSegment1, End.B);
-        intersection.addRoadSegment(roadSegment2, End.A);
         intersection.addRoadSegment(roadSegment3, End.B);
+        intersection.addRoadSegment(roadSegment2, End.A);
         intersection.addRoadSegment(roadSegment4, End.A);
 
         System.out.println(roadSegment1);

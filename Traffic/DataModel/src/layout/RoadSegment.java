@@ -35,10 +35,6 @@ public class RoadSegment {
         intersectionMap.put(end, intersection);
     }
 
-    public Intersection getIntersection(End end) {
-        return intersectionMap.get(end);
-    }
-
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("road segment " + id + "\n");
