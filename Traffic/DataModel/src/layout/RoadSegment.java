@@ -1,36 +1,28 @@
 package layout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RoadSegment {
 
     private static int _id = 0;
 
-    private static int A = 0;
-    private static int B = 1;
-
     private List<RoadPoint> pointList;
-    private RoadLaneLayout layout;
-    private Intersection[] intersections;
+    private RoadLayout layout;
+    private HashMap<End, Intersection>intersectionMap;
     private int id;
 
-    public RoadSegment(RoadLaneLayout aLayout, RoadPoint ... points) {
+    public RoadSegment(RoadLayout aLayout, RoadPoint ... points) {
         pointList = new ArrayList<RoadPoint>();
-        intersections = new Intersection[2];
+        intersectionMap = new HashMap<End, Intersection>();
         layout = aLayout;
         addRoadPoints(points);
-        attachInitialIntersectionToEnd(A);
-        attachInitialIntersectionToEnd(B);
         id = ++_id;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void updateIntersection(Intersection intersection, int end) {
-        intersections[end] = intersection;
     }
 
     private void addRoadPoints(RoadPoint ... points) {
@@ -39,17 +31,12 @@ public class RoadSegment {
         }
     }
 
-    private void attachInitialIntersectionToEnd(int end) {
-        setEndIntersection(end, new Intersection());
+    public void setEndIntersection(End end, Intersection intersection) {
+        intersectionMap.put(end, intersection);
     }
 
-    private void setEndIntersection(int end, Intersection intersection) {
-        intersections[end] = intersection;
-        intersections[end].addRoadSegmentEnd(new RoadSegmentEnd(this,end));
-    }
-
-    public Intersection getIntersection(int end) {
-        return intersections[end];
+    public Intersection getIntersection(End end) {
+        return intersectionMap.get(end);
     }
 
     public String toString() {
@@ -61,10 +48,9 @@ public class RoadSegment {
             sb.append("point #" + count + " " + point + "\n");
         }
         sb.append(layout);
-        sb.append(intersections[A]);
-        sb.append(intersections[B]);
+        if(intersectionMap.get(End.A) != null)sb.append(" end " + End.A + " " + intersectionMap.get(End.A));
+        if(intersectionMap.get(End.B) != null)sb.append(" end " + End.B + " " + intersectionMap.get(End.B));
         return sb.toString();
     }
-
 
 }

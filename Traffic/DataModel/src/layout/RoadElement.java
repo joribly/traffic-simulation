@@ -2,7 +2,7 @@ package layout;
 
 import static  layout.Direction.*;
 
-public enum RoadItemType {
+public enum RoadElement {
 
     LANE_STD(20.0, true, false, false, STRAIGHT),
     LANE_STD_PLUS_LEFT_RIGHT_TURN(20.0, true, false, false, STRAIGHT_AND_LEFT_RIGHT_TURN),
@@ -24,7 +24,7 @@ public enum RoadItemType {
     private boolean isDivider;
     private Direction direction;
 
-    RoadItemType(double width, boolean isLane, boolean isDivider, boolean isMedian, Direction direction) {
+    RoadElement(double width, boolean isLane, boolean isDivider, boolean isMedian, Direction direction) {
         this.width = width;
         this.isLane = isLane;
         this.isDivider = isDivider;

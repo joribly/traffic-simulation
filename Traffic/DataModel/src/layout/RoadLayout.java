@@ -1,8 +1,8 @@
 package layout;
 
-import static layout.RoadItemType.*;
+import static layout.RoadElement.*;
 
-public enum RoadLaneLayout {
+public enum RoadLayout {
 
     FOUR_LANE_STD(
             HEADING_FROM,
@@ -33,13 +33,13 @@ public enum RoadLaneLayout {
             DIVIDER_SOLID);
 
 
-    private RoadItemType[] layout;
+    private RoadElement[] layout;
     private int count;
 
-    RoadLaneLayout(RoadItemType... aLayout) {
+    RoadLayout(RoadElement... aLayout) {
         layout = aLayout;
         count = 0;
-        for(RoadItemType item: layout) {
+        for(RoadElement item: layout) {
             if(item.isLane())count++;
         }
     }
@@ -53,7 +53,7 @@ public enum RoadLaneLayout {
         sb.append(this.name() + " has " + count + " lanes \n");
         int laneNumber = 0;
         Direction direction = Direction.STRAIGHT;
-        for(RoadItemType item: layout) {
+        for(RoadElement item: layout) {
             if(item.isHeading()) {
                 direction = item.getDirection();
             }
