@@ -1,12 +1,5 @@
 package layout;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Blystone
- * Date: 12/9/12
- * Time: 12:58 PM
- * To change this template use File | Settings | File Templates.
- */
 public enum Attachment {
 
     AA(0,0),

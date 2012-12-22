@@ -2,13 +2,6 @@ package layout;
 
 import static layout.RoadItemType.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Blystone
- * Date: 12/2/12
- * Time: 5:09 PM
- * To change this template use File | Settings | File Templates.
- */
 public enum RoadLaneLayout {
 
     FOUR_LANE_STD(

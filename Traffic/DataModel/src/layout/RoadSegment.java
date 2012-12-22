@@ -3,13 +3,6 @@ package layout;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Blystone
- * Date: 12/2/12
- * Time: 1:35 PM
- * To change this template use File | Settings | File Templates.
- */
 public class RoadSegment {
 
     private static int _id = 0;

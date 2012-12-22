@@ -6,13 +6,6 @@ import sun.net.www.protocol.mailto.MailToURLConnection;
 import javax.vecmath.Point3d;
 import javax.vecmath.Tuple3d;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Blystone
- * Date: 12/2/12
- * Time: 1:35 PM
- * To change this template use File | Settings | File Templates.
- */
 public class RoadPoint {
     Vector3D orientation;
     Point3d origin;

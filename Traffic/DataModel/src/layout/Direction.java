@@ -1,12 +1,5 @@
 package layout;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Blystone
- * Date: 12/8/12
- * Time: 8:54 AM
- * To change this template use File | Settings | File Templates.
- */
 public enum Direction {
     NA,
     STRAIGHT,
