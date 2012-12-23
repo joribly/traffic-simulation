@@ -4,8 +4,8 @@ public enum RoadLayout {
 
     FOUR_LANE_STD(
             Lane.createStandardFrom().setCanGoStraight().setCanGoRight().setCanChangeLaneLeft(),
-            Lane.createStandardFrom().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
-            Lane.createStandardTo().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardFrom().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight().index(),
+            Lane.createStandardTo().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight().index(),
             Lane.createStandardTo().setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
     );
 
