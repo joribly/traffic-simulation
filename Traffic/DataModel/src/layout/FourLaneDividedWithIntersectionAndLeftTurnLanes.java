@@ -5,14 +5,14 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
 
     public static void main(String [] args) {
 
-        /*
-         *             2
-         *             b
-         *             a
-         *       3 a-b   a-b 4
-         *             b
-         *             a
-         *             1
+        /*       ------------
+         *       |     2 --------
+         *       |     b     |   |
+         *       |     a     |   |
+         *       3 a-b   a-b 4   |
+         *             b         |
+         *             a         |
+         *             1 --------
          */
         RoadPoint rp1 = new RoadPoint(0.0,0.0,0.0,1.0,0.0,0.0);
 
@@ -49,6 +49,9 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
         intersection.addRoadSegment(roadSegment3, End.B);
         intersection.addRoadSegment(roadSegment2, End.A);
         intersection.addRoadSegment(roadSegment4, End.A);
+
+        intersection.mate(roadSegment1, roadSegment2);
+        intersection.mate(roadSegment3, roadSegment4);
 
         System.out.println(roadSegment1);
         System.out.println(roadSegment2);
