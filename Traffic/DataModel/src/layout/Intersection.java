@@ -16,30 +16,24 @@ public class Intersection {
     }
 
     public void mate(RoadSegment roadSegment1, RoadSegment roadSegment2){
-        RoadSegmentConnection connection = roadSegmentConnectionMap.get(roadSegment1);
-        if(connection != null) {
-            connection.setMate(roadSegment2);
-        }
-        /*
-         * if roadSegment2 has no mate yet, mate it to roadSegment1
-         */
-        connection = roadSegmentConnectionMap.get(roadSegment2);
-        if(connection != null) {
-            if(!connection.hasMate()) {
-                connection.setMate(roadSegment1);
-            }
+        RoadSegmentConnection connection1 = roadSegmentConnectionMap.get(roadSegment1);
+        RoadSegmentConnection connection2 = roadSegmentConnectionMap.get(roadSegment2);
+        if(connection1 == null || connection2 == null)return;
+        connection1.setMate(connection2);
+        if(!connection2.hasMate()) {
+            connection2.setMate(connection1);
         }
     }
 
     public RoadSegment getMateRoadSegment(RoadSegment roadSegment) {
-        return roadSegmentConnectionMap.get(roadSegment).getMate();
+        return roadSegmentConnectionMap.get(roadSegment).getMate().getRoadSegment();
     }
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(" connects to  ");
         for(RoadSegmentConnection roadSegmentConnection : roadSegmentConnectionMap.values()) {
-            sb.append(roadSegmentConnection + ", ");
+            sb.append("\n     " + roadSegmentConnection);
         }
         sb.append("\n");
         return sb.toString();
@@ -48,7 +42,7 @@ public class Intersection {
     static class RoadSegmentConnection {
         RoadSegment roadSegment;
         End end;
-        private RoadSegment mateRoadSegment;
+        private RoadSegmentConnection mateRoadSegmentConnection;
 
         public RoadSegmentConnection(RoadSegment roadSegment, End end) {
             this.roadSegment = roadSegment;
@@ -56,19 +50,29 @@ public class Intersection {
         }
 
         public String toString() {
-            return roadSegment.getId() + "-" + end;
+            if(!hasMate())return roadSegment.getId() + "-" + end;
+            return  roadSegment.getId() + "-" + end + "[mate: " +
+                    mateRoadSegmentConnection.getRoadSegment().getId() + "-" + mateRoadSegmentConnection.getEnd() + "]";
+        }
+
+        public End getEnd() {
+            return end;
         }
 
         public boolean hasMate() {
-            return mateRoadSegment != null;
+            return mateRoadSegmentConnection != null;
         }
 
-        public RoadSegment getMate() {
-            return mateRoadSegment;
+        public RoadSegmentConnection getMate() {
+            return mateRoadSegmentConnection;
         }
 
-       public void setMate(RoadSegment mateRoadSegment) {
-           this.mateRoadSegment = mateRoadSegment;
+        public RoadSegment getRoadSegment() {
+            return roadSegment;
+        }
+
+       public void setMate(RoadSegmentConnection mateRoadSegmentConnection) {
+           this.mateRoadSegmentConnection = mateRoadSegmentConnection;
         }
     }
 }
