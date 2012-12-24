@@ -64,6 +64,13 @@ public class Intersection {
         return sb.toString();
     }
 
+    public boolean roadSegmentLaneHasChoices(RoadSegment roadSegment, Lane lane) {
+        /*
+         * what exists in the intersection, and what can the lane do?
+         */
+        return false;
+    }
+
     class RoadSegmentConnection {
         RoadSegment roadSegment;
         End end;

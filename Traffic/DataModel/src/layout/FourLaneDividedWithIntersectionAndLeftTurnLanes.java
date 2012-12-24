@@ -1,5 +1,7 @@
 package layout;
 
+import sun.util.locale.LanguageTag;
+
 public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
 
 
@@ -56,12 +58,29 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
         RoadSegment roadSegment = roadSegment1;
         do {
             System.out.println(roadSegment);
+            FourLaneDividedWithIntersectionAndLeftTurnLanes.test(roadSegment, 3);
             roadSegment = intersection.getNextRoadSegment(roadSegment);
         }while(roadSegment.getId() != roadSegment1.getId());
 
-        /*
-         * Goal - start with road segment and lane, list choices.
-         */
 
+    }
+    public static void test(RoadSegment roadSegment, int count) {
+        RoadPoint roadPoint;
+        Lane lane;
+        End end;
+        Intersection intersection;
+        for(int i=0; i<count; i++) {
+            roadPoint = roadSegment.getRandomRoadPoint();
+            if((end = roadSegment.end(roadPoint)) != End.NA) {
+                intersection = roadSegment.getIntersection(end);
+                if(intersection != null) {
+                   lane = roadSegment.getRandomLane();
+                   if(intersection.roadSegmentLaneHasChoices(roadSegment, lane)) {
+                      System.out.println(roadPoint  + " " + lane + " has choices");
+                   }
+                }
+            }
+        }
+        System.out.println();
     }
 }

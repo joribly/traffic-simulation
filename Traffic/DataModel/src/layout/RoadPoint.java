@@ -7,12 +7,17 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Tuple3d;
 
 public class RoadPoint {
+
+    private static int _id = 0;
+
     Vector3D orientation;
     Point3d origin;
+    int id;
 
     public RoadPoint(RoadPoint roadPoint) {
         orientation = new Vector3D(roadPoint.orientation.getAlpha(), roadPoint.orientation.getDelta());
         origin = new Point3d(roadPoint.origin);
+        id = ++_id;
     }
 
     public RoadPoint(double x, double y, double z, double vx, double vy, double vz) {
@@ -20,8 +25,12 @@ public class RoadPoint {
         orientation = new Vector3D(vx, vy, vz);
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String toString() {
-        return "origin: " + origin + " orientation " + orientation;
+        return "(id=" + id + ") origin: " + origin + " orientation " + orientation;
     }
 
     public RoadPoint dX(double dx) {
@@ -41,5 +50,28 @@ public class RoadPoint {
 
     private void shiftOrigin(double dx, double dy, double dz) {
         origin.add(new Point3d(dx, dy, dz));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RoadPoint roadPoint = (RoadPoint) o;
+
+        if (id != roadPoint.id) return false;
+        if (orientation != null ? !orientation.equals(roadPoint.orientation) : roadPoint.orientation != null)
+            return false;
+        if (origin != null ? !origin.equals(roadPoint.origin) : roadPoint.origin != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = orientation != null ? orientation.hashCode() : 0;
+        result = 31 * result + (origin != null ? origin.hashCode() : 0);
+        result = 31 * result + id;
+        return result;
     }
 }

@@ -10,11 +10,9 @@ public enum RoadLayout {
     );
 
     private Lane[] lanes;
-    private int count;
 
     RoadLayout(Lane ... lanes) {
         this.lanes = lanes;
-        count = lanes.length;
     }
 
     public Lane getLane(int index) {
@@ -22,9 +20,13 @@ public enum RoadLayout {
         return lanes[index];
     }
 
+    public int getNumberOfLanes() {
+        return lanes.length;
+    }
+
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(this.name() + " has " + count + " lanes \n");
+        sb.append(this.name() + " has " + lanes.length + " lanes \n");
         int laneNumber = 0;
         for(Lane lane: lanes) {
             laneNumber++;

@@ -31,8 +31,17 @@ public class RoadSegment {
         }
     }
 
+    public RoadPoint getEndPoint(End end) {
+        if(end == End.A) return pointList.get(0);
+        return pointList.get(pointList.size()-1);
+    }
+
     public void setEndIntersection(End end, Intersection intersection) {
         intersectionMap.put(end, intersection);
+    }
+
+    public Intersection getIntersection(End end) {
+        return intersectionMap.get(end);
     }
 
     public String toString() {
@@ -49,4 +58,17 @@ public class RoadSegment {
         return sb.toString();
     }
 
+    public RoadPoint getRandomRoadPoint() {
+        return pointList.get((int) (Math.random() * pointList.size()));
+    }
+
+    public Lane getRandomLane() {
+        return layout.getLane((int) (Math.random() * layout.getNumberOfLanes()));
+    }
+
+    public End end(RoadPoint roadPoint) {
+        if(getEndPoint(End.A) == roadPoint)return End.A;
+        if(getEndPoint(End.B) == roadPoint)return End.B;
+        return End.NA;
+    }
 }
