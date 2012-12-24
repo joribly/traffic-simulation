@@ -10,12 +10,12 @@ public class RoadSegment {
 
     private List<RoadPoint> pointList;
     private RoadLayout layout;
-    private HashMap<End, Intersection>intersectionMap;
+    private HashMap<End, Transition> transitionMap;
     private int id;
 
     public RoadSegment(RoadLayout aLayout, RoadPoint ... points) {
         pointList = new ArrayList<RoadPoint>();
-        intersectionMap = new HashMap<End, Intersection>();
+        transitionMap = new HashMap<End, Transition>();
         layout = aLayout;
         addRoadPoints(points);
         id = ++_id;
@@ -36,12 +36,12 @@ public class RoadSegment {
         return pointList.get(pointList.size()-1);
     }
 
-    public void setEndIntersection(End end, Intersection intersection) {
-        intersectionMap.put(end, intersection);
+    public void setEndTransition(End end, Transition transition) {
+        transitionMap.put(end, transition);
     }
 
-    public Intersection getIntersection(End end) {
-        return intersectionMap.get(end);
+    public Transition getTransition(End end) {
+        return transitionMap.get(end);
     }
 
     public String toString() {
@@ -53,8 +53,8 @@ public class RoadSegment {
             sb.append("point #" + count + " " + point + "\n");
         }
         sb.append(layout);
-        if(intersectionMap.get(End.A) != null)sb.append(" end " + End.A + " " + intersectionMap.get(End.A));
-        if(intersectionMap.get(End.B) != null)sb.append(" end " + End.B + " " + intersectionMap.get(End.B));
+        if(transitionMap.get(End.A) != null)sb.append(" end " + End.A + " " + transitionMap.get(End.A));
+        if(transitionMap.get(End.B) != null)sb.append(" end " + End.B + " " + transitionMap.get(End.B));
         return sb.toString();
     }
 

@@ -1,7 +1,5 @@
 package layout;
 
-import sun.util.locale.LanguageTag;
-
 public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
 
 
@@ -45,21 +43,21 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
                 new RoadPoint(rp2).dX(80.0),
                 new RoadPoint(rp2).dX(100.0));
 
-        Intersection intersection = new Intersection();
+        Transition transition = new Transition();
         // in order, e.g. clockwise
-        intersection.addRoadSegment(roadSegment1, End.B);
-        intersection.addRoadSegment(roadSegment3, End.B);
-        intersection.addRoadSegment(roadSegment2, End.A);
-        intersection.addRoadSegment(roadSegment4, End.A);
+        transition.addRoadSegment(roadSegment1, End.B);
+        transition.addRoadSegment(roadSegment3, End.B);
+        transition.addRoadSegment(roadSegment2, End.A);
+        transition.addRoadSegment(roadSegment4, End.A);
 
-        intersection.mate(roadSegment1, roadSegment2);
-        intersection.mate(roadSegment3, roadSegment4);
+        transition.mate(roadSegment1, roadSegment2);
+        transition.mate(roadSegment3, roadSegment4);
 
         RoadSegment roadSegment = roadSegment1;
         do {
             System.out.println(roadSegment);
             FourLaneDividedWithIntersectionAndLeftTurnLanes.test(roadSegment, 3);
-            roadSegment = intersection.getNextRoadSegment(roadSegment);
+            roadSegment = transition.getNextRoadSegment(roadSegment);
         }while(roadSegment.getId() != roadSegment1.getId());
 
 
@@ -68,14 +66,14 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
         RoadPoint roadPoint;
         Lane lane;
         End end;
-        Intersection intersection;
+        Transition transition;
         for(int i=0; i<count; i++) {
             roadPoint = roadSegment.getRandomRoadPoint();
             if((end = roadSegment.end(roadPoint)) != End.NA) {
-                intersection = roadSegment.getIntersection(end);
-                if(intersection != null) {
+                transition = roadSegment.getTransition(end);
+                if(transition != null) {
                    lane = roadSegment.getRandomLane();
-                   if(intersection.roadSegmentLaneHasChoices(roadSegment, lane)) {
+                   if(transition.roadSegmentLaneHasChoices(roadSegment, lane)) {
                       System.out.println(roadPoint  + " " + lane + " has choices");
                    }
                 }

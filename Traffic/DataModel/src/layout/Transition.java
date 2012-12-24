@@ -2,19 +2,19 @@ package layout;
 
 import java.util.*;
 
-public class Intersection {
+public class Transition {
 
     private Map<RoadSegment, RoadSegmentConnection> roadSegmentConnectionMap;
     private RoadSegmentConnection previousRoadSegmentConnection;
     private RoadSegmentConnection firstRoadSegmentConnection;
 
-    public Intersection() {
+    public Transition() {
         roadSegmentConnectionMap = new LinkedHashMap<RoadSegment, RoadSegmentConnection>();
         firstRoadSegmentConnection = previousRoadSegmentConnection = null;
     }
 
     public void addRoadSegment(RoadSegment roadSegment, End end) {
-        roadSegment.setEndIntersection(end, this);
+        roadSegment.setEndTransition(end, this);
         RoadSegmentConnection roadSegmentConnection = new RoadSegmentConnection(roadSegment, end);
         roadSegmentConnectionMap.put(roadSegment, roadSegmentConnection);
         doubleLinkRoadSegmentConnection(roadSegmentConnection);
@@ -66,9 +66,9 @@ public class Intersection {
 
     public boolean roadSegmentLaneHasChoices(RoadSegment roadSegment, Lane lane) {
         /*
-         * what exists in the intersection, and what can the lane do?
+         * what options exists at the transition, and what can the lane do?
          */
-        return false;
+        return true;
     }
 
     class RoadSegmentConnection {
