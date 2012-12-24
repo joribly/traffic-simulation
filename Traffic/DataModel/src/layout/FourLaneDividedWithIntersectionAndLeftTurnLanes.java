@@ -53,12 +53,15 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
         intersection.mate(roadSegment1, roadSegment2);
         intersection.mate(roadSegment3, roadSegment4);
 
-        System.out.println(roadSegment1);
-        System.out.println(roadSegment2);
+        RoadSegment roadSegment = roadSegment1;
+        do {
+            System.out.println(roadSegment);
+            roadSegment = intersection.getNextRoadSegment(roadSegment);
+        }while(roadSegment.getId() != roadSegment1.getId());
 
-        System.out.println(roadSegment3);
-        System.out.println(roadSegment4);
-
+        /*
+         * Goal - start with road segment and lane, list choices.
+         */
 
     }
 }

@@ -1,14 +1,6 @@
 package layout;
 
-/**
- * Created with IntelliJ IDEA.
- * User: margie
- * Date: 12/23/12
- * Time: 3:59 PM
- * To change this template use File | Settings | File Templates.
- */
 public class Lane {
-
     private boolean indexed;
     private boolean canGoLeft;
     private boolean canGoRight;
@@ -68,11 +60,30 @@ public class Lane {
         return width;
     }
 
-
     private enum Travel {
         TO,
         FROM,
         TO_FROM
+    }
+
+    public boolean canGoLeft() {
+        return canGoLeft;
+    }
+
+    public boolean canGoRight() {
+        return canGoRight;
+    }
+
+    public boolean canGoStraight() {
+        return canGoStraight;
+    }
+
+    public boolean canChangeLaneLeft() {
+        return canChangeLaneLeft;
+    }
+
+    public boolean canChangeLaneRight() {
+        return canChangeLaneRight;
     }
 
     public String toString() {

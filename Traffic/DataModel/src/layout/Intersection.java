@@ -5,14 +5,31 @@ import java.util.*;
 public class Intersection {
 
     private Map<RoadSegment, RoadSegmentConnection> roadSegmentConnectionMap;
+    private RoadSegmentConnection previousRoadSegmentConnection;
+    private RoadSegmentConnection firstRoadSegmentConnection;
 
     public Intersection() {
         roadSegmentConnectionMap = new LinkedHashMap<RoadSegment, RoadSegmentConnection>();
+        firstRoadSegmentConnection = previousRoadSegmentConnection = null;
     }
 
     public void addRoadSegment(RoadSegment roadSegment, End end) {
-        roadSegmentConnectionMap.put(roadSegment, new RoadSegmentConnection(roadSegment, end));
         roadSegment.setEndIntersection(end, this);
+        RoadSegmentConnection roadSegmentConnection = new RoadSegmentConnection(roadSegment, end);
+        roadSegmentConnectionMap.put(roadSegment, roadSegmentConnection);
+        doubleLinkRoadSegmentConnection(roadSegmentConnection);
+    }
+
+    private void doubleLinkRoadSegmentConnection(RoadSegmentConnection roadSegmentConnection) {
+        if(previousRoadSegmentConnection != null) {
+            previousRoadSegmentConnection.setNext(roadSegmentConnection);
+            roadSegmentConnection.setPrevious(previousRoadSegmentConnection);
+            roadSegmentConnection.setNext(firstRoadSegmentConnection);
+        }
+        else {
+            firstRoadSegmentConnection = roadSegmentConnection;
+        }
+        previousRoadSegmentConnection = roadSegmentConnection;
     }
 
     public void mate(RoadSegment roadSegment1, RoadSegment roadSegment2){
@@ -29,6 +46,14 @@ public class Intersection {
         return roadSegmentConnectionMap.get(roadSegment).getMate().getRoadSegment();
     }
 
+    public RoadSegment getNextRoadSegment(RoadSegment roadSegment) {
+        return roadSegmentConnectionMap.get(roadSegment).getNext().getRoadSegment();
+    }
+
+    public RoadSegment getPreviousRoadSegment(RoadSegment roadSegment) {
+        return roadSegmentConnectionMap.get(roadSegment).getPrevious().getRoadSegment();
+    }
+
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(" connects to  ");
@@ -39,10 +64,11 @@ public class Intersection {
         return sb.toString();
     }
 
-    static class RoadSegmentConnection {
+    class RoadSegmentConnection {
         RoadSegment roadSegment;
         End end;
         private RoadSegmentConnection mateRoadSegmentConnection;
+        private RoadSegmentConnection previousRoadSegmentConnection, nextRoadSegmentConnection;
 
         public RoadSegmentConnection(RoadSegment roadSegment, End end) {
             this.roadSegment = roadSegment;
@@ -74,5 +100,22 @@ public class Intersection {
        public void setMate(RoadSegmentConnection mateRoadSegmentConnection) {
            this.mateRoadSegmentConnection = mateRoadSegmentConnection;
         }
+
+        public void setNext(RoadSegmentConnection roadSegmentConnection) {
+            nextRoadSegmentConnection = roadSegmentConnection;
+        }
+
+        public void setPrevious(RoadSegmentConnection roadSegmentConnection) {
+            previousRoadSegmentConnection = roadSegmentConnection;
+        }
+
+        public RoadSegmentConnection getNext() {
+            return nextRoadSegmentConnection;
+        }
+
+        public RoadSegmentConnection getPrevious() {
+            return previousRoadSegmentConnection;
+        }
     }
+
 }
