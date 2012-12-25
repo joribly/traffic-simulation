@@ -10,9 +10,9 @@ public class RoadPoint {
 
     private static int _id = 0;
 
-    Vector3D orientation;
-    Point3d origin;
-    int id;
+    private final Vector3D orientation;
+    private final Point3d origin;
+    private int id;
 
     public RoadPoint(RoadPoint roadPoint) {
         orientation = new Vector3D(roadPoint.orientation.getAlpha(), roadPoint.orientation.getDelta());
@@ -62,9 +62,8 @@ public class RoadPoint {
         if (id != roadPoint.id) return false;
         if (orientation != null ? !orientation.equals(roadPoint.orientation) : roadPoint.orientation != null)
             return false;
-        if (origin != null ? !origin.equals(roadPoint.origin) : roadPoint.origin != null) return false;
+        return !(origin != null ? !origin.equals(roadPoint.origin) : roadPoint.origin != null);
 
-        return true;
     }
 
     @Override

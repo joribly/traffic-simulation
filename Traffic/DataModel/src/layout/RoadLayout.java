@@ -15,8 +15,8 @@ public enum RoadLayout {
             Lane.createStandardTo().setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
     );
 
-    private LinkedList<Lane> toLanes;
-    private LinkedList<Lane> fromLanes;
+    private final LinkedList<Lane> toLanes;
+    private final LinkedList<Lane> fromLanes;
 
     RoadLayout(Lane ... lanes) {
         toLanes = new LinkedList<Lane>();
@@ -46,16 +46,16 @@ public enum RoadLayout {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(this.name() + " has " + getNumberOfLanes() + " lanes \n");
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.name()).append(" has ").append(getNumberOfLanes()).append(" lanes \n");
         int laneNumber = 0;
         for(Lane lane: fromLanes) {
             laneNumber++;
-            sb.append(lane + "\n");
+            sb.append(lane).append("\n");
         }
         for(Lane lane: toLanes) {
             laneNumber++;
-            sb.append(lane + "\n");
+            sb.append(lane).append("\n");
         }
         return sb.toString();
     }

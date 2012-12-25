@@ -12,7 +12,7 @@ public class Lane {
     private boolean canChangeLaneRight;
     private Travel travel;
     private double width;
-    int id;
+    private final int id;
 
     private Lane() {
         id = ++_id;
@@ -35,7 +35,7 @@ public class Lane {
         return (new Lane()).setWidth(20.0).travel(Travel.FROM);
     }
 
-    public Lane travel(Travel travel) {
+    Lane travel(Travel travel) {
         this.travel = travel;
         return this;
     }
@@ -60,7 +60,7 @@ public class Lane {
         canChangeLaneLeft = true;
         return this;
     }
-    public Lane setWidth(double width) {
+    Lane setWidth(double width) {
         this.width = width;
         return this;
     }
@@ -104,8 +104,8 @@ public class Lane {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("# " + id + " ");
+        StringBuilder sb = new StringBuilder();
+        sb.append("# ").append(id).append(" ");
         sb.append(travel);
         if(canGoLeft)sb.append(" : Left");
         if(canGoRight)sb.append(" : Right");
@@ -124,9 +124,8 @@ public class Lane {
 
         Lane lane = (Lane) o;
 
-        if (id != lane.id) return false;
+        return id == lane.id;
 
-        return true;
     }
 
     @Override

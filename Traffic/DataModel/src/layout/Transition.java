@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Transition {
 
-    private Map<RoadSegment, RoadSegmentConnection> roadSegmentConnectionMap;
+    private final Map<RoadSegment, RoadSegmentConnection> roadSegmentConnectionMap;
     private RoadSegmentConnection previousRoadSegmentConnection;
     private RoadSegmentConnection firstRoadSegmentConnection;
 
@@ -55,10 +55,10 @@ public class Transition {
     }
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(" connects to  ");
         for(RoadSegmentConnection roadSegmentConnection : roadSegmentConnectionMap.values()) {
-            sb.append("\n     " + roadSegmentConnection);
+            sb.append("\n     ").append(roadSegmentConnection);
         }
         sb.append("\n");
         return sb.toString();
@@ -76,8 +76,8 @@ public class Transition {
     }
 
     class RoadSegmentConnection {
-        RoadSegment roadSegment;
-        End end;
+        final RoadSegment roadSegment;
+        final End end;
         private RoadSegmentConnection mateRoadSegmentConnection;
         private RoadSegmentConnection previousRoadSegmentConnection, nextRoadSegmentConnection;
 

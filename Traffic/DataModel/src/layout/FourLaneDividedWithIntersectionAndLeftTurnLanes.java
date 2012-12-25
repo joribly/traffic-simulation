@@ -64,7 +64,7 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
 
 
     }
-    public static void test(RoadSegment roadSegment, int count) {
+    private static void test(RoadSegment roadSegment, int count) {
         RoadPoint roadPoint;
         Lane lane;
         End end;
