@@ -1,6 +1,9 @@
 package layout;
 
 public class Lane {
+
+    private static int _id = 0;
+
     private boolean indexed;
     private boolean canGoLeft;
     private boolean canGoRight;
@@ -9,8 +12,14 @@ public class Lane {
     private boolean canChangeLaneRight;
     private Travel travel;
     private double width;
+    int id;
 
     private Lane() {
+        id = ++_id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Lane index() {
@@ -60,6 +69,14 @@ public class Lane {
         return width;
     }
 
+    public boolean isTo() {
+        return travel == Travel.TO;
+    }
+
+    public boolean isFrom() {
+        return travel == Travel.FROM;
+    }
+
     private enum Travel {
         TO,
         FROM,
@@ -88,6 +105,7 @@ public class Lane {
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
+        sb.append("# " + id + " ");
         sb.append(travel);
         if(canGoLeft)sb.append(" : Left");
         if(canGoRight)sb.append(" : Right");
@@ -98,4 +116,23 @@ public class Lane {
         if(indexed)sb.append(" (indexed)");
         return sb.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Lane lane = (Lane) o;
+
+        if (id != lane.id) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+
 }

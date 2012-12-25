@@ -44,6 +44,10 @@ public class RoadSegment {
         return transitionMap.get(end);
     }
 
+    public RoadLayout getLayout() {
+        return layout;
+    }
+
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("road segment " + id + "\n");

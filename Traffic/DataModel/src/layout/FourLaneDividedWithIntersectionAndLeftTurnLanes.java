@@ -1,5 +1,7 @@
 package layout;
 
+import java.util.List;
+
 public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
 
 
@@ -67,6 +69,7 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
         Lane lane;
         End end;
         Transition transition;
+        List<Lane> lanes;
         for(int i=0; i<count; i++) {
             roadPoint = roadSegment.getRandomRoadPoint();
             if((end = roadSegment.end(roadPoint)) != End.NA) {
@@ -75,6 +78,12 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
                    lane = roadSegment.getRandomLane();
                    if(transition.roadSegmentLaneHasChoices(roadSegment, lane)) {
                       System.out.println(roadPoint  + " " + lane + " has choices");
+                      lanes = roadSegment.getLayout().getUTurnDestinationLanes(lane);
+                      if(lanes != null) {
+                          for(Lane uTurnLane: lanes) {
+                              System.out.println(" U-Turn to " + uTurnLane);
+                          }
+                      }
                    }
                 }
             }

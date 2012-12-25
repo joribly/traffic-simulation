@@ -65,9 +65,13 @@ public class Transition {
     }
 
     public boolean roadSegmentLaneHasChoices(RoadSegment roadSegment, Lane lane) {
-        /*
-         * what options exists at the transition, and what can the lane do?
-         */
+        End end = roadSegmentConnectionMap.get(roadSegment).getEnd();
+        if(lane.isTo()) {
+            if(end == End.A)return false;
+        }
+        if(lane.isFrom()) {
+            if(end == End.B)return false;
+        }
         return true;
     }
 
