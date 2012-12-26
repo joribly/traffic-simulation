@@ -66,7 +66,7 @@ public enum RoadLayout {
         return lanes.indexOf(aLane) - lanes.indexOf(getIndexedLane(travel));
     }
 
-    private LinkedList<Lane> getLaneList(Travel travel) {
+    public LinkedList<Lane> getLaneList(Travel travel) {
         if(travel == Travel.FROM)return fromLanes;
         return toLanes;
     }

@@ -89,6 +89,25 @@ public class Transition {
         return roadSegmentConnectionMap.get(roadSegment).getEnd();
     }
 
+    public RoadSegment nextRoadSegment(RoadSegment roadSegment) {
+        return roadSegmentConnectionMap.get(roadSegment).getNext().getRoadSegment();
+    }
+
+    public RoadSegment previousRoadSegment(RoadSegment roadSegment) {
+        return roadSegmentConnectionMap.get(roadSegment).getPrevious().getRoadSegment();
+    }
+
+    public List<Lane> getTurnLanes(RoadSegment turnRoadSegment) {
+        End turnRoadSegmentEnd = roadSegmentConnectionMap.get(turnRoadSegment).getEnd();
+        if(turnRoadSegmentEnd == End.A) {
+            return turnRoadSegment.getLayout().getLaneList(Travel.FROM);
+        }
+        else if(turnRoadSegmentEnd == End.B) {
+            return turnRoadSegment.getLayout().getLaneList(Travel.TO);
+        }
+        return null;
+    }
+
     class RoadSegmentConnection {
         private final RoadSegment roadSegment;
         private final End end;
