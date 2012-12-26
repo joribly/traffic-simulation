@@ -78,7 +78,7 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
                 if(transition != null) {
                    lane = roadSegment.getRandomLane();
                    if(transition.roadSegmentLaneHasChoices(roadSegment, lane)) {
-                      System.out.println(roadPoint  + " " + lane + " has choices");
+                      System.out.println(roadPoint  + " lane " + lane + " has choices");
                       if(lane.canGoLeft()) {
                          lanes = roadSegment.getLayout().getUTurnDestinationLanes(lane);
                          if(lanes != null) {
@@ -89,6 +89,9 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
                       }
                       if(lane.canGoStraight()) {
                           straightLane = transition.getStraightLane(roadSegment, lane);
+                          RoadSegment mateRoadSegment = transition.getMateRoadSegment(roadSegment);
+                          End mateEnd = transition.getEnd(mateRoadSegment);
+                          System.out.println(" Straight to " + mateRoadSegment.getId() + " (end=" +  mateEnd + ")" + " lane " + straightLane);
                       }
                    }
                 }

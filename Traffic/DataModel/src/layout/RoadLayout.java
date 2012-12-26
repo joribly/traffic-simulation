@@ -43,6 +43,13 @@ public enum RoadLayout {
         return toLanes.get(index - fromLanes.size());
     }
 
+    private Lane getClampedLane(int index, Travel travel) {
+        LinkedList<Lane> lanes = getLaneList(travel);
+        index = Math.min(Math.max(0,index), lanes.size()-1);
+        return lanes.get(index);
+
+    }
+
     public int getNumberOfLanes() {
         return fromLanes.size() + toLanes.size();
     }
@@ -54,8 +61,9 @@ public enum RoadLayout {
     }
 
     public int getOffsetFromIndex(Lane aLane) {
-        LinkedList<Lane> lanes = getLaneList(aLane.getTravel());
-        return lanes.indexOf(aLane) - lanes.indexOf(getIndexedLane(aLane.getTravel()));
+        Travel travel = aLane.getTravel();
+        LinkedList<Lane> lanes = getLaneList(travel);
+        return lanes.indexOf(aLane) - lanes.indexOf(getIndexedLane(travel));
     }
 
     private LinkedList<Lane> getLaneList(Travel travel) {
@@ -84,9 +92,10 @@ public enum RoadLayout {
             return mateIndexedLane;
         }
         else {
-            Lane indexedLane = roadLayout.getIndexedLane(lane.getTravel());
-
+            Travel travel = lane.getTravel();
+            int offset = roadLayout.getOffsetFromIndex(lane);
+            int index = mateRoadLayout.getLaneList(travel).indexOf(mateIndexedLane);
+            return mateRoadLayout.getClampedLane((index + offset), travel);
         }
-        return null;
     }
 }

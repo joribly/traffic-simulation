@@ -85,6 +85,10 @@ public class Transition {
         return RoadLayout.getMateLane(roadLayout, mateRoadLayout, lane);
     }
 
+    public End getEnd(RoadSegment roadSegment) {
+        return roadSegmentConnectionMap.get(roadSegment).getEnd();
+    }
+
     class RoadSegmentConnection {
         private final RoadSegment roadSegment;
         private final End end;

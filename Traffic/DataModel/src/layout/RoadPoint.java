@@ -1,16 +1,13 @@
 package layout;
 
 import org.apache.commons.math.geometry.Vector3D;
-import sun.net.www.protocol.mailto.MailToURLConnection;
-
 import javax.vecmath.Point3d;
-import javax.vecmath.Tuple3d;
 
 public class RoadPoint {
 
     private static int _id = 0;
 
-    private final Vector3D orientation;
+    private Vector3D orientation;
     private final Point3d origin;
     private int id;
 
@@ -44,7 +41,7 @@ public class RoadPoint {
     }
 
     public RoadPoint dA(double da) {
-        orientation.add(new Vector3D(Math.toRadians(da), 0.0));
+        orientation = new Vector3D(orientation.getAlpha() + Math.toRadians(da) , 0.0);
         return this;
     }
 
