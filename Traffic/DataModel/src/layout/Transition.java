@@ -54,6 +54,10 @@ public class Transition {
         return roadSegmentConnectionMap.get(roadSegment).getPrevious().getRoadSegment();
     }
 
+    public End getRoadSegmentEnd(RoadSegment roadSegment) {
+        return roadSegmentConnectionMap.get(roadSegment).getEnd();
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(" connects to  ");
@@ -75,9 +79,15 @@ public class Transition {
         return true;
     }
 
+    public Lane getStraightLane(RoadSegment roadSegment, Lane lane) {
+        RoadLayout roadLayout = roadSegment.getLayout();
+        RoadLayout mateRoadLayout = roadSegmentConnectionMap.get(roadSegment).getMate().getRoadSegment().getLayout();
+        return RoadLayout.getMateLane(roadLayout, mateRoadLayout, lane);
+    }
+
     class RoadSegmentConnection {
-        final RoadSegment roadSegment;
-        final End end;
+        private final RoadSegment roadSegment;
+        private final End end;
         private RoadSegmentConnection mateRoadSegmentConnection;
         private RoadSegmentConnection previousRoadSegmentConnection, nextRoadSegmentConnection;
 

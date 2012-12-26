@@ -27,8 +27,16 @@ public enum RoadLayout {
         }
     }
 
-    public Lane getLane(int index) {
-        if(index < 0 || index >= getNumberOfLanes()) return null;
+    public Lane getIndexedLane(Travel travel) {
+        LinkedList<Lane> lanes = getLaneList(travel);
+        for(Lane lane: lanes) {
+            if(lane.isIndexed())return lane;
+        }
+        return null;
+    }
+
+    public Lane getClampedLane(int index) {
+        index = Math.min(Math.max(0,index), getNumberOfLanes()-1);
         if(index < fromLanes.size()) {
             return fromLanes.get(index);
         }
@@ -45,6 +53,16 @@ public enum RoadLayout {
         return null;
     }
 
+    public int getOffsetFromIndex(Lane aLane) {
+        LinkedList<Lane> lanes = getLaneList(aLane.getTravel());
+        return lanes.indexOf(aLane) - lanes.indexOf(getIndexedLane(aLane.getTravel()));
+    }
+
+    private LinkedList<Lane> getLaneList(Travel travel) {
+        if(travel == Travel.FROM)return fromLanes;
+        return toLanes;
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.name()).append(" has ").append(getNumberOfLanes()).append(" lanes \n");
@@ -58,5 +76,17 @@ public enum RoadLayout {
             sb.append(lane).append("\n");
         }
         return sb.toString();
+    }
+
+    public static Lane getMateLane(RoadLayout roadLayout, RoadLayout mateRoadLayout, Lane lane) {
+        Lane mateIndexedLane = mateRoadLayout.getIndexedLane(lane.getTravel());
+        if(lane.isIndexed()) {
+            return mateIndexedLane;
+        }
+        else {
+            Lane indexedLane = roadLayout.getIndexedLane(lane.getTravel());
+
+        }
+        return null;
     }
 }

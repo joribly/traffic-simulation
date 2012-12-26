@@ -66,7 +66,7 @@ public class RoadSegment {
     }
 
     public Lane getRandomLane() {
-        return layout.getLane((int) (Math.random() * layout.getNumberOfLanes()));
+        return layout.getClampedLane((int) (Math.random() * layout.getNumberOfLanes()));
     }
 
     public End end(RoadPoint roadPoint) {

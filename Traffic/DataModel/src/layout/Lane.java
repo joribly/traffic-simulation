@@ -77,10 +77,8 @@ public class Lane {
         return travel == Travel.FROM;
     }
 
-    private enum Travel {
-        TO,
-        FROM,
-        TO_FROM
+    public boolean isIndexed() {
+        return indexed;
     }
 
     public boolean canGoLeft() {
@@ -101,6 +99,10 @@ public class Lane {
 
     public boolean canChangeLaneRight() {
         return canChangeLaneRight;
+    }
+
+    public Travel getTravel() {
+        return travel;
     }
 
     public String toString() {
