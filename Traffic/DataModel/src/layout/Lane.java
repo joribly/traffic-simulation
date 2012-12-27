@@ -107,15 +107,15 @@ public class Lane {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("# ").append(id).append(" ");
-        sb.append(travel);
-        if(canGoLeft)sb.append(" : Left");
-        if(canGoRight)sb.append(" : Right");
-        if(canGoStraight)sb.append(" : Straight");
-        if(canChangeLaneLeft && canChangeLaneRight)sb.append(" : left-right lane change allowed") ;
-        else if(canChangeLaneLeft)sb.append(" : left lane change allowed") ;
-        else if(canChangeLaneRight)sb.append(" : right lane change allowed");
-        if(indexed)sb.append(" (indexed)");
+        if(indexed)sb.append("* ");
+        else sb.append("# ");
+        String t = (travel.name() + "  ").substring(0,4);
+        sb.append(id).append(" [").append(t).append("] ");
+        if(canGoLeft)sb.append(":TL");
+        if(canGoRight)sb.append(":TR");
+        if(canGoStraight)sb.append(":SS");
+        if(canChangeLaneLeft)sb.append(":SL") ;
+        if(canChangeLaneRight)sb.append(":SR");
         return sb.toString();
     }
 

@@ -39,12 +39,14 @@ public class RoadSegment {
         transitionMap.put(end, transition);
     }
 
-    public Transition getTransition(End end) {
-        return transitionMap.get(end);
-    }
-
     public RoadLayout getLayout() {
         return layout;
+    }
+
+    public End end(RoadPoint roadPoint) {
+        if(getEndPoint(End.A) == roadPoint)return End.A;
+        if(getEndPoint(End.B) == roadPoint)return End.B;
+        return End.NA;
     }
 
     public String toString() {
@@ -61,17 +63,4 @@ public class RoadSegment {
         return sb.toString();
     }
 
-    public RoadPoint getRandomRoadPoint() {
-        return pointList.get((int) (Math.random() * pointList.size()));
-    }
-
-    public Lane getRandomLane() {
-        return layout.getClampedLane((int) (Math.random() * layout.getNumberOfLanes()));
-    }
-
-    public End end(RoadPoint roadPoint) {
-        if(getEndPoint(End.A) == roadPoint)return End.A;
-        if(getEndPoint(End.B) == roadPoint)return End.B;
-        return End.NA;
-    }
 }

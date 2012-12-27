@@ -17,6 +17,7 @@ public enum RoadLayout {
 
     private final LinkedList<Lane> toLanes;
     private final LinkedList<Lane> fromLanes;
+    //TODO handle TO_FROM case
 
     RoadLayout(Lane ... lanes) {
         toLanes = new LinkedList<Lane>();
@@ -43,7 +44,7 @@ public enum RoadLayout {
         return toLanes.get(index - fromLanes.size());
     }
 
-    private Lane getClampedLane(int index, Travel travel) {
+    private Lane getClampedTravelLane(int index, Travel travel) {
         LinkedList<Lane> lanes = getLaneList(travel);
         index = Math.min(Math.max(0,index), lanes.size()-1);
         return lanes.get(index);
@@ -60,15 +61,28 @@ public enum RoadLayout {
         return null;
     }
 
+    public LinkedList<Lane> getLaneList(Travel travel) {
+        if(travel == Travel.FROM)return fromLanes;
+        return toLanes;
+    }
+
     public int getOffsetFromIndex(Lane aLane) {
         Travel travel = aLane.getTravel();
         LinkedList<Lane> lanes = getLaneList(travel);
         return lanes.indexOf(aLane) - lanes.indexOf(getIndexedLane(travel));
     }
 
-    public LinkedList<Lane> getLaneList(Travel travel) {
-        if(travel == Travel.FROM)return fromLanes;
-        return toLanes;
+    public static Lane getMateLane(RoadLayout roadLayout, RoadLayout mateRoadLayout, Lane lane) {
+        Lane mateIndexedLane = mateRoadLayout.getIndexedLane(lane.getTravel());
+        if(lane.isIndexed()) {
+            return mateIndexedLane;
+        }
+        else {
+            Travel travel = lane.getTravel();
+            int offset = roadLayout.getOffsetFromIndex(lane);
+            int index = mateRoadLayout.getLaneList(travel).indexOf(mateIndexedLane);
+            return mateRoadLayout.getClampedTravelLane((index + offset), travel);
+        }
     }
 
     public String toString() {
@@ -86,16 +100,4 @@ public enum RoadLayout {
         return sb.toString();
     }
 
-    public static Lane getMateLane(RoadLayout roadLayout, RoadLayout mateRoadLayout, Lane lane) {
-        Lane mateIndexedLane = mateRoadLayout.getIndexedLane(lane.getTravel());
-        if(lane.isIndexed()) {
-            return mateIndexedLane;
-        }
-        else {
-            Travel travel = lane.getTravel();
-            int offset = roadLayout.getOffsetFromIndex(lane);
-            int index = mateRoadLayout.getLaneList(travel).indexOf(mateIndexedLane);
-            return mateRoadLayout.getClampedLane((index + offset), travel);
-        }
-    }
 }
