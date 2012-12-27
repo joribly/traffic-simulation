@@ -109,6 +109,61 @@ public class Transition {
         return null;
     }
 
+    public void testLaneConnections() {
+        End end,turnEnd;
+        List<Lane>laneList = null, turnLaneList;
+        Lane straightLane;
+        for(RoadSegment roadSegment : roadSegmentConnectionMap.keySet()) {
+            System.out.println("\n" + roadSegment);
+            laneList = null;
+            end = roadSegmentConnectionMap.get(roadSegment).getEnd();
+            if(end == End.A) {
+                laneList = roadSegment.getLayout().getLaneList(Travel.FROM);
+            }
+            else if(end == End.B) {
+                laneList = roadSegment.getLayout().getLaneList(Travel.TO);
+            }
+            if(laneList != null) {
+               for(Lane lane: laneList) {
+                   if(roadSegmentLaneHasChoices(roadSegment, lane)) {
+                       RoadSegment turnRoadSegment, mateRoadSegment = getMateRoadSegment(roadSegment);
+                       if(lane.canGoLeft()) {
+                           laneList = roadSegment.getLayout().getUTurnDestinationLanes(lane);
+                           if(laneList != null) {
+                               for(Lane uTurnLane: laneList) {
+                                   System.out.println(" U-Turn to roadSegment " + roadSegment.getId() + " lane " + uTurnLane + " (end=" + end + ")");
+                               }
+                           }
+                           turnRoadSegment = roadSegment;
+                           while((turnRoadSegment = nextRoadSegment(turnRoadSegment)) != mateRoadSegment)  {
+                               turnEnd = getEnd(turnRoadSegment);
+                               turnLaneList = getTurnLanes(turnRoadSegment);
+                               for(Lane leftTurnLane: turnLaneList) {
+                                   System.out.println(" Left turn to  roadSegment " + turnRoadSegment.getId() + " lane " + leftTurnLane + " (end=" + turnEnd + ")");
+                               }
+                           }
+                       }
+                       if(lane.canGoStraight()) {
+                           straightLane = getStraightLane(roadSegment, lane);
+                           End mateEnd = getEnd(mateRoadSegment);
+                           System.out.println(" Straight to roadSegment " + mateRoadSegment.getId() + " lane " + straightLane + " (end=" +  mateEnd + ")");
+                       }
+                       if(lane.canGoRight()) {
+                           turnRoadSegment = roadSegment;
+                           while((turnRoadSegment = previousRoadSegment(turnRoadSegment)) != mateRoadSegment)  {
+                               turnEnd = getEnd(turnRoadSegment);
+                               turnLaneList = getTurnLanes(turnRoadSegment);
+                               for(Lane rightTurnLane: turnLaneList) {
+                                   System.out.println(" Right turn to  roadSegment " + turnRoadSegment.getId() + " lane " + rightTurnLane + " (end=" + turnEnd + ")");
+                               }
+                           }
+                       }
+                   }
+               }
+            }
+        }
+    }
+
     class RoadSegmentConnection {
         private final RoadSegment roadSegment;
         private final End end;

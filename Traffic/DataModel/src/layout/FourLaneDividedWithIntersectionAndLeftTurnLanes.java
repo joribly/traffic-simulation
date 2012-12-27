@@ -55,66 +55,7 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
         transition.mate(roadSegment1, roadSegment2);
         transition.mate(roadSegment3, roadSegment4);
 
-        RoadSegment roadSegment = roadSegment1;
-        do {
-            System.out.println(roadSegment);
-            FourLaneDividedWithIntersectionAndLeftTurnLanes.test(roadSegment, 10);
-            roadSegment = transition.getNextRoadSegment(roadSegment);
-        }while(roadSegment.getId() != roadSegment1.getId());
+        transition.testLaneConnections();
 
-
-    }
-    private static void test(RoadSegment roadSegment, int count) {
-        RoadPoint roadPoint;
-        Lane lane;
-        End end, turnEnd;
-        Transition transition;
-        List<Lane> lanes;
-        Lane straightLane;
-        for(int i=0; i<count; i++) {
-            roadPoint = roadSegment.getRandomRoadPoint();
-            if((end = roadSegment.end(roadPoint)) != End.NA) {
-                transition = roadSegment.getTransition(end);
-                if(transition != null) {
-                   lane = roadSegment.getRandomLane();
-                   if(transition.roadSegmentLaneHasChoices(roadSegment, lane)) {
-                      System.out.println(roadPoint  + " lane " + lane + " has choices");
-                       RoadSegment turnRoadSegment, mateRoadSegment = transition.getMateRoadSegment(roadSegment);
-                       if(lane.canGoLeft()) {
-                         lanes = roadSegment.getLayout().getUTurnDestinationLanes(lane);
-                         if(lanes != null) {
-                             for(Lane uTurnLane: lanes) {
-                                 System.out.println(" U-Turn to " + uTurnLane + " (end=" + end + ")");
-                             }
-                         }
-                         turnRoadSegment = roadSegment;
-                         while((turnRoadSegment = transition.nextRoadSegment(turnRoadSegment)) != mateRoadSegment)  {
-                             turnEnd = transition.getEnd(turnRoadSegment);
-                             lanes = transition.getTurnLanes(turnRoadSegment);
-                             for(Lane leftTurnLane: lanes) {
-                                 System.out.println(" Left turn to  " + leftTurnLane + " (end=" + turnEnd + ")");
-                             }
-                         }
-                      }
-                      if(lane.canGoStraight()) {
-                          straightLane = transition.getStraightLane(roadSegment, lane);
-                          End mateEnd = transition.getEnd(mateRoadSegment);
-                          System.out.println(" Straight to " + mateRoadSegment.getId() + " (end=" +  mateEnd + ")" + " lane " + straightLane);
-                      }
-                      if(lane.canGoRight()) {
-                          turnRoadSegment = roadSegment;
-                          while((turnRoadSegment = transition.previousRoadSegment(turnRoadSegment)) != mateRoadSegment)  {
-                              turnEnd = transition.getEnd(turnRoadSegment);
-                              lanes = transition.getTurnLanes(turnRoadSegment);
-                              for(Lane rightTurnLane: lanes) {
-                                  System.out.println(" Right turn to  " + rightTurnLane + " (end=" + turnEnd + ")");
-                              }
-                          }
-                      }
-                   }
-                }
-            }
-        }
-        System.out.println();
     }
 }
