@@ -58,7 +58,7 @@ public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
         RoadSegment roadSegment = roadSegment1;
         do {
             System.out.println(roadSegment);
-            FourLaneDividedWithIntersectionAndLeftTurnLanes.test(roadSegment, 3);
+            FourLaneDividedWithIntersectionAndLeftTurnLanes.test(roadSegment, 10);
             roadSegment = transition.getNextRoadSegment(roadSegment);
         }while(roadSegment.getId() != roadSegment1.getId());
 

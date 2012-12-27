@@ -25,6 +25,7 @@ public class Transition {
             previousRoadSegmentConnection.setNext(roadSegmentConnection);
             roadSegmentConnection.setPrevious(previousRoadSegmentConnection);
             roadSegmentConnection.setNext(firstRoadSegmentConnection);
+            firstRoadSegmentConnection.setPrevious(roadSegmentConnection);
         }
         else {
             firstRoadSegmentConnection = roadSegmentConnection;
