@@ -4,7 +4,6 @@ public class Lane {
 
     private static int _id = 0;
 
-    private boolean indexed;
     private boolean canGoLeft;
     private boolean canGoRight;
     private boolean canGoStraight;
@@ -20,11 +19,6 @@ public class Lane {
 
     public int getId() {
         return id;
-    }
-
-    public Lane index() {
-        indexed = true;
-        return this;
     }
 
     public static Lane createStandardTo() {
@@ -77,10 +71,6 @@ public class Lane {
         return travel == Travel.FROM;
     }
 
-    public boolean isIndexed() {
-        return indexed;
-    }
-
     public boolean canGoLeft() {
         return canGoLeft;
     }
@@ -107,8 +97,7 @@ public class Lane {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        if(indexed)sb.append("* ");
-        else sb.append("# ");
+        sb.append("# ");
         String t = (travel.name() + "  ").substring(0,4);
         sb.append(id).append(" [").append(t).append("] ");
         if(canGoLeft)sb.append(":TL");

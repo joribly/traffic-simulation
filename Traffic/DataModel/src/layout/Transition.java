@@ -74,10 +74,37 @@ public class Transition {
         return getConnection(roadSegment).getPrevious().getRoadSegment();
     }
 
-    public Lane getStraightLane(RoadSegment roadSegment, Lane lane) {
-        RoadLayout roadLayout = roadSegment.getLayout();
-        RoadLayout mateRoadLayout = getMateRoadSegment(roadSegment).getLayout();
-        return RoadLayout.getMateLane(roadLayout, mateRoadLayout, lane);
+    public List<Lane> getStraightLaneList(RoadSegment roadSegment, Lane lane) {
+        RoadSegment mateRoadSegment = getMateRoadSegment(roadSegment);
+        End mateRoadSegmentEnd = getEnd(mateRoadSegment);
+        List<Lane>mateLaneList,laneList,straightLaneList;
+        laneList = roadSegment.getLayout().getLaneList(lane.getTravel());
+        if(mateRoadSegmentEnd == End.A) {
+            mateLaneList = mateRoadSegment.getLayout().getLaneList(Travel.FROM);
+        }
+        else {
+            mateLaneList = mateRoadSegment.getLayout().getLaneList(Travel.TO);
+        }
+        straightLaneList = new ArrayList<Lane>();
+        int laneCount = laneList.size();
+        int mateLaneCount = mateLaneList.size();
+        int index,laneIndex = laneList.indexOf(lane);
+        int off;
+        if(laneCount < mateLaneCount) { // fan-out
+            for(int i=0; i<mateLaneCount; i++) {
+                if((i/laneCount) == laneIndex) {
+                   straightLaneList.add(mateLaneList.get(i));
+                }
+            }
+        }
+        else if(laneCount == mateLaneCount) {
+            straightLaneList.add(mateLaneList.get(laneIndex));
+        }
+        else {
+            index = laneIndex / mateLaneCount;
+            straightLaneList.add(mateLaneList.get(index));
+        }
+        return straightLaneList;
     }
 
     public List<Lane> getTurnLanes(RoadSegment turnRoadSegment) {
@@ -103,8 +130,7 @@ public class Transition {
 
     public void testLaneConnections() {
         End end,turnEnd;
-        List<Lane>laneList,turnLaneList;
-        Lane straightLane;
+        List<Lane>laneList,turnLaneList,straightLaneList;
         for(RoadSegment roadSegment : roadSegmentConnectionMap.keySet()) {
             System.out.println("\n" + roadSegment);
             laneList = null;
@@ -136,9 +162,11 @@ public class Transition {
                            }
                        }
                        if(lane.canGoStraight()) {
-                           straightLane = getStraightLane(roadSegment, lane);
+                           straightLaneList = getStraightLaneList(roadSegment, lane);
                            End mateEnd = getEnd(mateRoadSegment);
-                           System.out.println("lane " + lane.getId() + ": Straight to roadSegment " + mateRoadSegment.getId() + " lane " + straightLane + " (end=" +  mateEnd + ")");
+                           for(Lane straightLane: straightLaneList) {
+                               System.out.println("lane " + lane.getId() + ": Straight to roadSegment " + mateRoadSegment.getId() + " lane " + straightLane + " (end=" +  mateEnd + ")");
+                           }
                        }
                        if(lane.canGoRight()) {
                            turnRoadSegment = roadSegment;

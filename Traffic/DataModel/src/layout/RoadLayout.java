@@ -1,5 +1,6 @@
 package layout;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,8 +11,15 @@ public enum RoadLayout {
      */
     FOUR_LANE_STD(
             Lane.createStandardFrom().setCanGoStraight().setCanGoRight().setCanChangeLaneLeft(),
-            Lane.createStandardFrom().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight().index(),
-            Lane.createStandardTo().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight().index(),
+            Lane.createStandardFrom().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo().setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
+    ), SIX_LANE_STD(
+            Lane.createStandardFrom().setCanGoStraight().setCanGoRight().setCanChangeLaneLeft(),
+            Lane.createStandardFrom().setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
+            Lane.createStandardFrom().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo().setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
             Lane.createStandardTo().setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
     );
 
@@ -20,35 +28,16 @@ public enum RoadLayout {
     //TODO handle TO_FROM case
 
     RoadLayout(Lane ... lanes) {
+        /*
+         * lane lists uniformly go from innermost lane to outermost lane,
+         * even though constructor is by convention from - outer to inner, to - inner to outer.
+         */
         toLanes = new LinkedList<Lane>();
         fromLanes = new LinkedList<Lane>();
         for(Lane lane: lanes) {
-            if(lane.isFrom())fromLanes.add(lane);
+            if(lane.isFrom())fromLanes.push(lane);
             if(lane.isTo())toLanes.add(lane);
         }
-    }
-
-    public Lane getIndexedLane(Travel travel) {
-        LinkedList<Lane> lanes = getLaneList(travel);
-        for(Lane lane: lanes) {
-            if(lane.isIndexed())return lane;
-        }
-        return null;
-    }
-
-    public Lane getClampedLane(int index) {
-        index = Math.min(Math.max(0,index), getNumberOfLanes()-1);
-        if(index < fromLanes.size()) {
-            return fromLanes.get(index);
-        }
-        return toLanes.get(index - fromLanes.size());
-    }
-
-    private Lane getClampedTravelLane(int index, Travel travel) {
-        LinkedList<Lane> lanes = getLaneList(travel);
-        index = Math.min(Math.max(0,index), lanes.size()-1);
-        return lanes.get(index);
-
     }
 
     public int getNumberOfLanes() {
@@ -57,32 +46,13 @@ public enum RoadLayout {
 
     public List<Lane> getUTurnDestinationLanes(Lane lane) {
         if(lane == toLanes.getFirst()) return fromLanes;
-        if(lane == fromLanes.getLast()) return toLanes;
+        if(lane == fromLanes.getFirst()) return toLanes;
         return null;
     }
 
     public LinkedList<Lane> getLaneList(Travel travel) {
         if(travel == Travel.FROM)return fromLanes;
         return toLanes;
-    }
-
-    public int getOffsetFromIndex(Lane aLane) {
-        Travel travel = aLane.getTravel();
-        LinkedList<Lane> lanes = getLaneList(travel);
-        return lanes.indexOf(aLane) - lanes.indexOf(getIndexedLane(travel));
-    }
-
-    public static Lane getMateLane(RoadLayout roadLayout, RoadLayout mateRoadLayout, Lane lane) {
-        Lane mateIndexedLane = mateRoadLayout.getIndexedLane(lane.getTravel());
-        if(lane.isIndexed()) {
-            return mateIndexedLane;
-        }
-        else {
-            Travel travel = lane.getTravel();
-            int offset = roadLayout.getOffsetFromIndex(lane);
-            int index = mateRoadLayout.getLaneList(travel).indexOf(mateIndexedLane);
-            return mateRoadLayout.getClampedTravelLane((index + offset), travel);
-        }
     }
 
     public String toString() {

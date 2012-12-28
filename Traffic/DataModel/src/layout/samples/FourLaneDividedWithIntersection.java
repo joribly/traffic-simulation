@@ -1,20 +1,22 @@
-package layout;
+package layout.samples;
+
+import layout.*;
 
 import java.util.List;
 
-public class FourLaneDividedWithIntersectionAndLeftTurnLanes {
+public class FourLaneDividedWithIntersection {
 
 
     public static void main(String [] args) {
 
-        /*       ------------
-         *       |     2 --------
-         *       |     b     |   |
-         *       |     a     |   |
-         *       3 a-b   a-b 4   |
-         *             b         |
-         *             a         |
-         *             1 --------
+        /*
+         *             2
+         *             b
+         *             a
+         *       3 a-b   a-b 4
+         *             b
+         *             a
+         *             1
          */
         RoadPoint rp1 = new RoadPoint(0.0,0.0,0.0,1.0,0.0,0.0);
 
