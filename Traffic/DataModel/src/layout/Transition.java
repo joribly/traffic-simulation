@@ -86,25 +86,31 @@ public class Transition {
             mateLaneList = mateRoadSegment.getLayout().getLaneList(Travel.TO);
         }
         straightLaneList = new ArrayList<Lane>();
-        int laneCount = laneList.size();
-        int mateLaneCount = mateLaneList.size();
-        int index,laneIndex = laneList.indexOf(lane);
-        int off;
-        if(laneCount < mateLaneCount) { // fan-out
-            for(int i=0; i<mateLaneCount; i++) {
-                if((i/laneCount) == laneIndex) {
-                   straightLaneList.add(mateLaneList.get(i));
-                }
-            }
-        }
-        else if(laneCount == mateLaneCount) {
-            straightLaneList.add(mateLaneList.get(laneIndex));
-        }
-        else {
-            index = laneIndex / mateLaneCount;
-            straightLaneList.add(mateLaneList.get(index));
+        int laneIndex= laneList.indexOf(lane);
+        int laneCheckIndex = -1;
+        int mateCheckIndex= -1;
+        int testCheckIndex;
+        do {
+            laneCheckIndex = getNextStraightLaneIndex(laneList, laneCheckIndex);
+            mateCheckIndex = getNextStraightLaneIndex(mateLaneList, mateCheckIndex);
+        }while(laneCheckIndex != laneIndex);
+        straightLaneList.add(mateLaneList.get(mateCheckIndex));
+        while (mateCheckIndex !=  (testCheckIndex = getNextStraightLaneIndex(mateLaneList, mateCheckIndex))) {
+            laneCheckIndex = getNextStraightLaneIndex(laneList, laneCheckIndex);
+            if(laneCheckIndex != laneIndex)break;
+            mateCheckIndex = testCheckIndex;
+            straightLaneList.add(mateLaneList.get(mateCheckIndex));
         }
         return straightLaneList;
+    }
+
+    private int getNextStraightLaneIndex(List<Lane>lanes, int index) {
+        // returns next index, until no more, then returns the input value
+        int oldIndex = index;
+        for(int i = ++index; i< lanes.size(); i++) {
+            if(lanes.get(i).canGoStraight())return i;
+        }
+        return oldIndex;
     }
 
     public List<Lane> getTurnLanes(RoadSegment turnRoadSegment) {
