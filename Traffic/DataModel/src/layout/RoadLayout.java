@@ -10,17 +10,17 @@ public enum RoadLayout {
      * always ordered from, then to  - also note, RoadLayouts/Lanes are reused. not specific instances for a RoadSegment
      */
     FOUR_LANE_STD(
-            Lane.createStandardFrom().setCanGoStraight().setCanGoRight().setCanChangeLaneLeft(),
-            Lane.createStandardFrom().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
-            Lane.createStandardTo().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
-            Lane.createStandardTo().setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
+            Lane.createStandardFrom(2).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft(),
+            Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo(2).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
     ), SIX_LANE_STD(
-            Lane.createStandardFrom().setCanGoStraight().setCanGoRight().setCanChangeLaneLeft(),
-            Lane.createStandardFrom().setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
-            Lane.createStandardFrom().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
-            Lane.createStandardTo().setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
-            Lane.createStandardTo().setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
-            Lane.createStandardTo().setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
+            Lane.createStandardFrom(3).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft(),
+            Lane.createStandardFrom(2).setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
+            Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo(2).setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
+            Lane.createStandardTo(3).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
     );
 
     private final LinkedList<Lane> toLanes;

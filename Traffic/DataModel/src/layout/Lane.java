@@ -2,8 +2,6 @@ package layout;
 
 public class Lane {
 
-    private static int _id = 0;
-
     private boolean canGoLeft;
     private boolean canGoRight;
     private boolean canGoStraight;
@@ -13,20 +11,20 @@ public class Lane {
     private double width;
     private final int id;
 
-    private Lane() {
-        id = ++_id;
+    private Lane(int laneId) {
+        id = laneId;
     }
 
-    public int getId() {
-        return id;
+    public String getId() {
+        return "" + id + travel.name().charAt(0);
     }
 
-    public static Lane createStandardTo() {
-        return (new Lane()).setWidth(20.0).travel(Travel.TO);
+    public static Lane createStandardTo(int laneId) {
+        return (new Lane(laneId)).setWidth(20.0).travel(Travel.TO);
     }
 
-    public static Lane createStandardFrom() {
-        return (new Lane()).setWidth(20.0).travel(Travel.FROM);
+    public static Lane createStandardFrom(int laneId) {
+        return (new Lane(laneId)).setWidth(20.0).travel(Travel.FROM);
     }
 
     Lane travel(Travel travel) {
@@ -97,9 +95,7 @@ public class Lane {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("# ");
-        String t = (travel.name() + "  ").substring(0,4);
-        sb.append(id).append(" [").append(t).append("] ");
+        sb.append(getId()).append(" ");
         if(canGoLeft)sb.append(":TL");
         if(canGoRight)sb.append(":TR");
         if(canGoStraight)sb.append(":SS");
