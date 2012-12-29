@@ -28,6 +28,7 @@ public enum RoadLayout {
             Lane.createStandardTo(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
             Lane.createStandardTo(2).setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
             Lane.createStandardTo(3).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
+    ), DEAD_END(
     );
 
     private final LinkedList<Lane> toLanes;

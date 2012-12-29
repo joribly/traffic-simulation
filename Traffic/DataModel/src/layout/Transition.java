@@ -1,5 +1,7 @@
 package layout;
 
+import com.sun.servicetag.SystemEnvironment;
+
 import java.util.*;
 
 public class Transition {
@@ -89,12 +91,14 @@ public class Transition {
             mateCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT);
         }while(laneCheckIndex != laneIndex);
 
-        resultLaneList.add(mateLaneList.get(mateCheckIndex));
-        while (mateCheckIndex !=  (testCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT))) {
-            laneCheckIndex = getNextLaneIndex(laneList, laneCheckIndex, direction);
-            if(laneCheckIndex != laneIndex)break;
-            mateCheckIndex = testCheckIndex;
+        if(mateCheckIndex >= 0) {
             resultLaneList.add(mateLaneList.get(mateCheckIndex));
+            while (mateCheckIndex !=  (testCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT))) {
+                laneCheckIndex = getNextLaneIndex(laneList, laneCheckIndex, direction);
+                if(laneCheckIndex != laneIndex)break;
+                mateCheckIndex = testCheckIndex;
+                resultLaneList.add(mateLaneList.get(mateCheckIndex));
+            }
         }
         return resultLaneList;
     }
