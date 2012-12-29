@@ -14,6 +14,13 @@ public enum RoadLayout {
             Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
             Lane.createStandardTo(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
             Lane.createStandardTo(2).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
+    ),FOUR_LANE_TWO_LEFT_TURN_LANES(
+            Lane.createStandardFrom(2).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft(),
+            Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo(1).setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo(2).setCanGoLeft().setCanChangeLaneRight().setCanChangeLaneLeft(),
+            Lane.createStandardTo(3).setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
+            Lane.createStandardTo(4).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
     ), SIX_LANE_STD(
             Lane.createStandardFrom(3).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft(),
             Lane.createStandardFrom(2).setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
@@ -58,13 +65,10 @@ public enum RoadLayout {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.name()).append(" has ").append(getNumberOfLanes()).append(" lanes \n");
-        int laneNumber = 0;
         for(Lane lane: fromLanes) {
-            laneNumber++;
             sb.append(lane).append("\n");
         }
         for(Lane lane: toLanes) {
-            laneNumber++;
             sb.append(lane).append("\n");
         }
         return sb.toString();

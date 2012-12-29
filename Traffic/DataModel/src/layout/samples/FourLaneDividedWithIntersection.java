@@ -21,7 +21,7 @@ public class FourLaneDividedWithIntersection {
         RoadPoint rp1 = new RoadPoint(0.0,0.0,0.0,1.0,0.0,0.0);
 
         RoadSegment roadSegment1 = new RoadSegment(
-                RoadLayout.FOUR_LANE_STD,
+                RoadLayout.FOUR_LANE_TWO_LEFT_TURN_LANES,
                 rp1,
                 new RoadPoint(rp1).dY(20.0),
                 new RoadPoint(rp1).dY(40.0));
