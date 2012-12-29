@@ -51,12 +51,6 @@ public enum RoadLayout {
         return fromLanes.size() + toLanes.size();
     }
 
-    public List<Lane> getUTurnDestinationLanes(Lane lane) {
-        if(lane == toLanes.getFirst()) return fromLanes;
-        if(lane == fromLanes.getFirst()) return toLanes;
-        return null;
-    }
-
     public LinkedList<Lane> getLaneList(Travel travel) {
         if(travel == Travel.FROM)return fromLanes;
         return toLanes;

@@ -39,8 +39,17 @@ public class RoadSegment {
         transitionMap.put(end, transition);
     }
 
-    public RoadLayout getLayout() {
-        return layout;
+    public List<Lane> getLaneList(Travel travel) {
+        return layout.getLaneList(travel);
+    }
+
+    public List<Lane> getUTurnLaneList(Travel travel) {
+        if(travel == Travel.FROM) {
+            return getLaneList(Travel.TO);
+        }
+        else {
+            return getLaneList(Travel.FROM);
+        }
     }
 
     public End end(RoadPoint roadPoint) {

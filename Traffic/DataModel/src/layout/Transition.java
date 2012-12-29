@@ -75,24 +75,20 @@ public class Transition {
     }
 
     public List<Lane> getPossibleLaneList(RoadSegment roadSegment, Lane lane, RoadSegment mateRoadSegment, Direction direction) {
-        End mateRoadSegmentEnd = getEnd(mateRoadSegment);
         List<Lane>mateLaneList,laneList,resultLaneList;
-        laneList = roadSegment.getLayout().getLaneList(lane.getTravel());
-        if(mateRoadSegmentEnd == End.A) {
-            mateLaneList = mateRoadSegment.getLayout().getLaneList(Travel.FROM);
-        }
-        else {
-            mateLaneList = mateRoadSegment.getLayout().getLaneList(Travel.TO);
-        }
+        laneList = roadSegment.getLaneList(lane.getTravel());
+        mateLaneList = getLeavingLaneList(mateRoadSegment);
         resultLaneList = new ArrayList<Lane>();
         int laneIndex= laneList.indexOf(lane);
         int laneCheckIndex = -1;
         int mateCheckIndex= -1;
         int testCheckIndex;
+
         do {
             laneCheckIndex = getNextLaneIndex(laneList, laneCheckIndex, direction);
             mateCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT);
         }while(laneCheckIndex != laneIndex);
+
         resultLaneList.add(mateLaneList.get(mateCheckIndex));
         while (mateCheckIndex !=  (testCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT))) {
             laneCheckIndex = getNextLaneIndex(laneList, laneCheckIndex, direction);
@@ -114,6 +110,16 @@ public class Transition {
         return oldIndex;
     }
 
+    private List<Lane> getLeavingLaneList(RoadSegment roadSegment) {
+        End roadSegmentEnd = getEnd(roadSegment);
+        if(roadSegmentEnd == End.A) {
+            return roadSegment.getLaneList(Travel.FROM);
+        }
+        else {
+            return roadSegment.getLaneList(Travel.TO);
+        }
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(" connects to  ");
@@ -129,23 +135,19 @@ public class Transition {
         List<Lane>laneList,turnLaneList,straightLaneList;
         for(RoadSegment roadSegment : roadSegmentConnectionMap.keySet()) {
             System.out.println("\n" + roadSegment);
-            laneList = null;
             end = getEnd(roadSegment);
-            if(end == End.A) {
-                laneList = roadSegment.getLayout().getLaneList(Travel.FROM);
-            }
-            else if(end == End.B) {
-                laneList = roadSegment.getLayout().getLaneList(Travel.TO);
-            }
+            laneList = getLeavingLaneList(roadSegment);
             if(laneList != null) {
                for(Lane lane: laneList) {
                    if(roadSegmentLaneHasChoices(roadSegment, lane)) {
                        RoadSegment turnRoadSegment, mateRoadSegment = getMateRoadSegment(roadSegment);
                        if(lane.canGoLeft()) {
-                           laneList = roadSegment.getLayout().getUTurnDestinationLanes(lane);
-                           if(laneList != null) {
-                               for(Lane uTurnLane: laneList) {
-                                   System.out.println("lane " + lane.getId() + ": U-Turn   to roadSegment " + roadSegment.getId() + " lane " + uTurnLane + " (end=" + end + ")");
+                           if(lane.isInner()) {
+                               laneList = roadSegment.getUTurnLaneList(lane.getTravel());
+                               if(laneList != null) {
+                                   for(Lane uTurnLane: laneList) {
+                                       System.out.println("lane " + lane.getId() + ": U-Turn   to roadSegment " + roadSegment.getId() + " lane " + uTurnLane + " (end=" + end + ")");
+                                   }
                                }
                            }
                            turnRoadSegment = roadSegment;

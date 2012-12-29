@@ -93,6 +93,10 @@ public class Lane {
         return travel;
     }
 
+    public boolean isInner() {
+        return id == 1;
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getId()).append(" ");
