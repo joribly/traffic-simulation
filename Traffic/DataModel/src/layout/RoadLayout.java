@@ -45,6 +45,12 @@ public enum RoadLayout {
             Lane.createStandardTo(1).setCanGoStraight().setCanChangeLaneRight(),
             Lane.createStandardTo(2).setCanGoStraight().setCanChangeLaneLeft()
     ),
+    ON_RAMP_FROM(
+            Lane.createStandardFrom(1).setCanGoRight()
+    ),
+    ON_RAMP_TO(
+            Lane.createStandardTo(1).setCanGoRight()
+    ),
     FOUR_LANE_TWO_LEFT_TURN_LANES(
             Lane.createStandardFrom(2).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft(),
             Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),

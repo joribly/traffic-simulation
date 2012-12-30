@@ -6,10 +6,10 @@ public class FourLaneFromOnOffRamp {
 
     /*
      *        | |
-     *       3| |off
+     *       4| |5 off
      *        |
-     *       2|
-     *        | |on
+     *       3|
+     *        | |2 on
      *       1| |
      */
 
@@ -24,7 +24,7 @@ public class FourLaneFromOnOffRamp {
                 new RoadPoint(rp1).dY(40.0));
 
         RoadSegment roadSegment2On = new RoadSegment(
-                RoadLayout.ONE_LANE_TO,
+                RoadLayout.ON_RAMP_TO,
                 new RoadPoint(rp1).dX(20.0),
                 new RoadPoint(rp1).dX(20.0).dY(20.0),
                 new RoadPoint(rp1).dX(20.0).dY(40.0));
