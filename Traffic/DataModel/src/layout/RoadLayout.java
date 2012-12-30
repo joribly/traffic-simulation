@@ -9,26 +9,59 @@ public enum RoadLayout {
     /*
      * always ordered from, then to  - also note, RoadLayouts/Lanes are reused. not specific instances for a RoadSegment
      */
+    ONE_LANE_TO(
+            Lane.createStandardTo(1).setCanGoStraight().setCanGoLeft().setCanGoRight()
+    ),
+    ONE_LANE_FROM(
+            Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft().setCanGoRight()
+    ),
+    TWO_LANE_STD(
+            Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft().setCanGoRight(),
+            Lane.createStandardTo(1).setCanGoStraight().setCanGoLeft().setCanGoRight()
+    ),
     FOUR_LANE_STD(
             Lane.createStandardFrom(2).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft(),
             Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
             Lane.createStandardTo(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
             Lane.createStandardTo(2).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
-    ),FOUR_LANE_TWO_LEFT_TURN_LANES(
+    ),
+    FOUR_LANE_DIVIDED(
+            Lane.createStandardFrom(2).setCanGoStraight().setCanChangeLaneLeft(),
+            Lane.createStandardFrom(1).setCanGoStraight().setCanChangeLaneRight(),
+            Lane.createStandardTo(1).setCanGoStraight().setCanChangeLaneRight(),
+            Lane.createStandardTo(2).setCanGoStraight().setCanChangeLaneLeft()
+    ),
+    FOUR_LANE_DIVIDED_PLUS_TO_ON_OFF_RAMP_LANE(
+            Lane.createStandardFrom(2).setCanGoStraight().setCanChangeLaneLeft(),
+            Lane.createStandardFrom(1).setCanGoStraight().setCanChangeLaneRight(),
+            Lane.createStandardTo(1).setCanGoStraight().setCanChangeLaneRight(),
+            Lane.createStandardTo(2).setCanGoStraight().setCanChangeLaneLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo(3).setCanGoRight().setCanChangeLaneLeft()
+    ),
+    FOUR_LANE_DIVIDED_PLUS_FROM_ON_OFF_RAMP_LANE(
+            Lane.createStandardFrom(3).setCanGoRight().setCanChangeLaneLeft(),
+            Lane.createStandardFrom(2).setCanGoStraight().setCanChangeLaneLeft().setCanChangeLaneRight(),
+            Lane.createStandardFrom(1).setCanGoStraight().setCanChangeLaneRight(),
+            Lane.createStandardTo(1).setCanGoStraight().setCanChangeLaneRight(),
+            Lane.createStandardTo(2).setCanGoStraight().setCanChangeLaneLeft()
+    ),
+    FOUR_LANE_TWO_LEFT_TURN_LANES(
             Lane.createStandardFrom(2).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft(),
             Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
             Lane.createStandardTo(1).setCanGoLeft().setCanChangeLaneRight(),
             Lane.createStandardTo(2).setCanGoLeft().setCanChangeLaneRight().setCanChangeLaneLeft(),
             Lane.createStandardTo(3).setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
             Lane.createStandardTo(4).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
-    ), SIX_LANE_STD(
+    ),
+    SIX_LANE_STD(
             Lane.createStandardFrom(3).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft(),
             Lane.createStandardFrom(2).setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
             Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
             Lane.createStandardTo(1).setCanGoStraight().setCanGoLeft().setCanChangeLaneRight(),
             Lane.createStandardTo(2).setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
             Lane.createStandardTo(3).setCanGoStraight().setCanGoRight().setCanChangeLaneLeft()
-    ), DEAD_END(
+    ),
+    DEAD_END(
     );
 
     private final LinkedList<Lane> toLanes;
