@@ -64,7 +64,7 @@ public class FourLaneFromOnOffRamp {
         transitionOn.mate(roadSegment2On, deadEnd6);
 
         transitionOff.addRoadSegment(roadSegment3, End.B);
-        transitionOn.addRoadSegment(deadEnd7, End.A);
+        transitionOff.addRoadSegment(deadEnd7, End.A);
         transitionOff.addRoadSegment(roadSegment4, End.A);
         transitionOff.addRoadSegment(roadSegment5Off, End.A);
         transitionOff.mate(roadSegment3, roadSegment4);

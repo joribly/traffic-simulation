@@ -10,10 +10,10 @@ public enum RoadLayout {
      * always ordered from, then to  - also note, RoadLayouts/Lanes are reused. not specific instances for a RoadSegment
      */
     ONE_LANE_TO(
-            Lane.createStandardTo(1).setCanGoStraight().setCanGoLeft().setCanGoRight()
+            Lane.createStandardTo(1).setCanGoStraight()
     ),
     ONE_LANE_FROM(
-            Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft().setCanGoRight()
+            Lane.createStandardFrom(1).setCanGoStraight()
     ),
     TWO_LANE_STD(
             Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft().setCanGoRight(),
@@ -36,10 +36,10 @@ public enum RoadLayout {
             Lane.createStandardFrom(1).setCanGoStraight().setCanChangeLaneRight(),
             Lane.createStandardTo(1).setCanGoStraight().setCanChangeLaneRight(),
             Lane.createStandardTo(2).setCanGoStraight().setCanChangeLaneLeft().setCanChangeLaneRight(),
-            Lane.createStandardTo(3).setCanGoRight().setCanChangeLaneLeft()
+            Lane.createStandardTo(3).setCanGoStraight().setCanChangeLaneLeft().setCanGoRight()
     ),
     FOUR_LANE_DIVIDED_PLUS_FROM_ON_OFF_RAMP_LANE(
-            Lane.createStandardFrom(3).setCanGoRight().setCanChangeLaneLeft(),
+            Lane.createStandardFrom(3).setCanGoStraight().setCanChangeLaneLeft().setCanGoRight(),
             Lane.createStandardFrom(2).setCanGoStraight().setCanChangeLaneLeft().setCanChangeLaneRight(),
             Lane.createStandardFrom(1).setCanGoStraight().setCanChangeLaneRight(),
             Lane.createStandardTo(1).setCanGoStraight().setCanChangeLaneRight(),

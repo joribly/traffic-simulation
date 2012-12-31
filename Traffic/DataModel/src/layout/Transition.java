@@ -117,6 +117,16 @@ public class Transition {
     private List<Lane> getLeavingLaneList(RoadSegment roadSegment) {
         End roadSegmentEnd = getEnd(roadSegment);
         if(roadSegmentEnd == End.A) {
+            return roadSegment.getLaneList(Travel.TO);
+        }
+        else {
+            return roadSegment.getLaneList(Travel.FROM);
+        }
+    }
+
+    private List<Lane> getEnteringLaneList(RoadSegment roadSegment) {
+        End roadSegmentEnd = getEnd(roadSegment);
+        if(roadSegmentEnd == End.A) {
             return roadSegment.getLaneList(Travel.FROM);
         }
         else {
@@ -140,7 +150,7 @@ public class Transition {
         for(RoadSegment roadSegment : roadSegmentConnectionMap.keySet()) {
             System.out.println("\n" + roadSegment);
             end = getEnd(roadSegment);
-            laneList = getLeavingLaneList(roadSegment);
+            laneList = getEnteringLaneList(roadSegment);
             if(laneList != null) {
                for(Lane lane: laneList) {
                    if(roadSegmentLaneHasChoices(roadSegment, lane)) {
@@ -185,6 +195,7 @@ public class Transition {
             }
         }
     }
+
 
     class RoadSegmentConnection {
         private final RoadSegment roadSegment;
