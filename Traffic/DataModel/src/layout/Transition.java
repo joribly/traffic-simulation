@@ -77,30 +77,38 @@ public class Transition {
     }
 
     public List<Lane> getPossibleLaneList(RoadSegment roadSegment, Lane lane, RoadSegment mateRoadSegment, Direction direction) {
-        List<Lane>mateLaneList,laneList,resultLaneList;
-        laneList = roadSegment.getLaneList(lane.getTravel());
-        mateLaneList = getLeavingLaneList(mateRoadSegment);
-        resultLaneList = new ArrayList<Lane>();
-        int laneIndex= laneList.indexOf(lane);
-        int laneCheckIndex = -1;
-        int mateCheckIndex= -1;
-        int testCheckIndex;
+        List<Lane>laneList = roadSegment.getLaneList(lane.getTravel());
+        List<Lane>mateLaneList = getLeavingLaneList(mateRoadSegment);
+        List<Lane>resultLaneList = new ArrayList<Lane>();
 
-        do {
-            laneCheckIndex = getNextLaneIndex(laneList, laneCheckIndex, direction);
-            mateCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT);
-        }while(laneCheckIndex != laneIndex);
+        int laneIndex= laneList.indexOf(lane);
+        int mateCheckIndex = getMateIndexForLane(laneList, laneIndex, mateLaneList, direction);
 
         if(mateCheckIndex >= 0) {
+            int testCheckIndex, laneCheckIndex=-1;
             resultLaneList.add(mateLaneList.get(mateCheckIndex));
-            while (mateCheckIndex !=  (testCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT))) {
+            while (true) {
+                testCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT);
                 laneCheckIndex = getNextLaneIndex(laneList, laneCheckIndex, direction);
+
+                if(testCheckIndex == mateCheckIndex)break;
                 if(laneCheckIndex != laneIndex)break;
+
                 mateCheckIndex = testCheckIndex;
                 resultLaneList.add(mateLaneList.get(mateCheckIndex));
             }
         }
         return resultLaneList;
+    }
+
+    private int getMateIndexForLane(List<Lane>laneList, int laneIndex, List<Lane>mateLaneList, Direction direction) {
+        int laneCheckIndex = -1;
+        int mateCheckIndex = -1;
+        do {
+            laneCheckIndex = getNextLaneIndex(laneList, laneCheckIndex, direction);
+            mateCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT);
+        }while(laneCheckIndex != laneIndex);
+        return mateCheckIndex;
     }
 
     private int getNextLaneIndex(List<Lane>lanes, int index, Direction direction) {
@@ -151,43 +159,41 @@ public class Transition {
             System.out.println("\n" + roadSegment);
             end = getEnd(roadSegment);
             laneList = getEnteringLaneList(roadSegment);
-            if(laneList != null) {
-               for(Lane lane: laneList) {
-                   if(roadSegmentLaneHasChoices(roadSegment, lane)) {
-                       RoadSegment turnRoadSegment, mateRoadSegment = getMateRoadSegment(roadSegment);
-                       if(lane.canGoLeft()) {
-                           if(lane.isInner()) {
-                               laneList = roadSegment.getUTurnLaneList(lane.getTravel());
-                               if(laneList != null) {
-                                   for(Lane uTurnLane: laneList) {
-                                       System.out.println("lane " + lane.getId() + ": U-Turn   to roadSegment " + roadSegment.getId() + " lane " + uTurnLane + " (end=" + end + ")");
-                                   }
-                               }
-                           }
-                           turnRoadSegment = roadSegment;
-                           while((turnRoadSegment = nextRoadSegment(turnRoadSegment)) != mateRoadSegment)  {
-                               turnEnd = getEnd(turnRoadSegment);
-                               turnLaneList = getPossibleLaneList(roadSegment, lane, turnRoadSegment, Direction.LEFT);
-                               for(Lane leftTurnLane: turnLaneList) {
-                                   System.out.println("lane " + lane.getId() + ": L-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + leftTurnLane + " (end=" + turnEnd + ")");
+            for(Lane lane: laneList) {
+               if(roadSegmentLaneHasChoices(roadSegment, lane)) {
+                   RoadSegment turnRoadSegment, mateRoadSegment = getMateRoadSegment(roadSegment);
+                   if(lane.canGoLeft()) {
+                       if(lane.isInner()) {
+                           laneList = roadSegment.getUTurnLaneList(lane.getTravel());
+                           if(laneList != null) {
+                               for(Lane uTurnLane: laneList) {
+                                   System.out.println("lane " + lane.getId() + ": U-Turn   to roadSegment " + roadSegment.getId() + " lane " + uTurnLane + " (end=" + end + ")");
                                }
                            }
                        }
-                       if(lane.canGoStraight()) {
-                           straightLaneList = getPossibleLaneList(roadSegment, lane, getMateRoadSegment(roadSegment), Direction.STRAIGHT);
-                           End mateEnd = getEnd(mateRoadSegment);
-                           for(Lane straightLane: straightLaneList) {
-                               System.out.println("lane " + lane.getId() + ": Straight to roadSegment " + mateRoadSegment.getId() + " lane " + straightLane + " (end=" +  mateEnd + ")");
+                       turnRoadSegment = roadSegment;
+                       while((turnRoadSegment = nextRoadSegment(turnRoadSegment)) != mateRoadSegment)  {
+                           turnEnd = getEnd(turnRoadSegment);
+                           turnLaneList = getPossibleLaneList(roadSegment, lane, turnRoadSegment, Direction.LEFT);
+                           for(Lane leftTurnLane: turnLaneList) {
+                               System.out.println("lane " + lane.getId() + ": L-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + leftTurnLane + " (end=" + turnEnd + ")");
                            }
                        }
-                       if(lane.canGoRight()) {
-                           turnRoadSegment = roadSegment;
-                           while((turnRoadSegment = previousRoadSegment(turnRoadSegment)) != mateRoadSegment)  {
-                               turnEnd = getEnd(turnRoadSegment);
-                               turnLaneList = getPossibleLaneList(roadSegment, lane, turnRoadSegment, Direction.RIGHT);
-                               for(Lane rightTurnLane: turnLaneList) {
-                                   System.out.println("lane " + lane.getId() + ": R-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + rightTurnLane + " (end=" + turnEnd + ")");
-                               }
+                   }
+                   if(lane.canGoStraight()) {
+                       straightLaneList = getPossibleLaneList(roadSegment, lane, getMateRoadSegment(roadSegment), Direction.STRAIGHT);
+                       End mateEnd = getEnd(mateRoadSegment);
+                       for(Lane straightLane: straightLaneList) {
+                           System.out.println("lane " + lane.getId() + ": Straight to roadSegment " + mateRoadSegment.getId() + " lane " + straightLane + " (end=" +  mateEnd + ")");
+                       }
+                   }
+                   if(lane.canGoRight()) {
+                       turnRoadSegment = roadSegment;
+                       while((turnRoadSegment = previousRoadSegment(turnRoadSegment)) != mateRoadSegment)  {
+                           turnEnd = getEnd(turnRoadSegment);
+                           turnLaneList = getPossibleLaneList(roadSegment, lane, turnRoadSegment, Direction.RIGHT);
+                           for(Lane rightTurnLane: turnLaneList) {
+                               System.out.println("lane " + lane.getId() + ": R-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + rightTurnLane + " (end=" + turnEnd + ")");
                            }
                        }
                    }

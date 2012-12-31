@@ -1,6 +1,7 @@
 package layout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -91,9 +92,9 @@ public enum RoadLayout {
         return fromLanes.size() + toLanes.size();
     }
 
-    public LinkedList<Lane> getLaneList(Travel travel) {
-        if(travel == Travel.FROM)return fromLanes;
-        return toLanes;
+    public List<Lane> getLaneList(Travel travel) {
+        if(travel == Travel.FROM)return Collections.unmodifiableList(fromLanes);
+        return Collections.unmodifiableList(toLanes);
     }
 
     public String toString() {
