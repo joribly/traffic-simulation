@@ -24,15 +24,18 @@ public class Transition {
 
     private void doubleLinkRoadSegmentConnection(RoadSegmentConnection roadSegmentConnection) {
         if(previousRoadSegmentConnection != null) {
-            previousRoadSegmentConnection.setNext(roadSegmentConnection);
-            roadSegmentConnection.setPrevious(previousRoadSegmentConnection);
-            roadSegmentConnection.setNext(firstRoadSegmentConnection);
-            firstRoadSegmentConnection.setPrevious(roadSegmentConnection);
+            linkRoadSegmentConnection(previousRoadSegmentConnection, roadSegmentConnection);
+            linkRoadSegmentConnection(roadSegmentConnection, firstRoadSegmentConnection);
         }
         else {
             firstRoadSegmentConnection = roadSegmentConnection;
         }
         previousRoadSegmentConnection = roadSegmentConnection;
+    }
+
+    private void linkRoadSegmentConnection(RoadSegmentConnection a, RoadSegmentConnection b) {
+        a.setNext(b);
+        b.setPrevious(a);
     }
 
     public void mate(RoadSegment roadSegment1, RoadSegment roadSegment2){
@@ -165,10 +168,8 @@ public class Transition {
                    if(lane.canGoLeft()) {
                        if(lane.isInner()) {
                            laneList = roadSegment.getUTurnLaneList(lane.getTravel());
-                           if(laneList != null) {
-                               for(Lane uTurnLane: laneList) {
-                                   System.out.println("lane " + lane.getId() + ": U-Turn   to roadSegment " + roadSegment.getId() + " lane " + uTurnLane + " (end=" + end + ")");
-                               }
+                           for(Lane uTurnLane: laneList) {
+                               System.out.println("lane " + lane.getId() + ": U-Turn   to roadSegment " + roadSegment.getId() + " lane " + uTurnLane + " (end=" + end + ")");
                            }
                        }
                        turnRoadSegment = roadSegment;
