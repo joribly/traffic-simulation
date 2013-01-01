@@ -9,17 +9,20 @@ public class Transition {
     private final Map<RoadSegment, RoadSegmentConnection> roadSegmentConnectionMap;
     private RoadSegmentConnection previousRoadSegmentConnection;
     private RoadSegmentConnection firstRoadSegmentConnection;
+    private String name;
 
-    public Transition() {
+    public Transition(String name) {
         roadSegmentConnectionMap = new LinkedHashMap<RoadSegment, RoadSegmentConnection>();
         firstRoadSegmentConnection = previousRoadSegmentConnection = null;
+        this.name = name;
     }
 
-    public void addRoadSegment(RoadSegment roadSegment, End end) {
+    public Transition addRoadSegment(RoadSegment roadSegment, End end) {
         roadSegment.setEndTransition(end, this);
         RoadSegmentConnection roadSegmentConnection = new RoadSegmentConnection(roadSegment, end);
         roadSegmentConnectionMap.put(roadSegment, roadSegmentConnection);
         doubleLinkRoadSegmentConnection(roadSegmentConnection);
+        return this;
     }
 
     private void doubleLinkRoadSegmentConnection(RoadSegmentConnection roadSegmentConnection) {
@@ -38,12 +41,15 @@ public class Transition {
         b.setPrevious(a);
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void mate(RoadSegment roadSegment1, RoadSegment roadSegment2){
         RoadSegmentConnection connection1 = getConnection(roadSegment1);
         RoadSegmentConnection connection2 = getConnection(roadSegment2);
-        if(connection1 == null || connection2 == null)return;
-        connection1.setMate(connection2);
-        if(!connection2.hasMate()) {
+        if(connection1 != null && connection2 != null) {
+            connection1.setMate(connection2);
             connection2.setMate(connection1);
         }
     }
@@ -83,12 +89,11 @@ public class Transition {
         List<Lane>laneList = roadSegment.getLaneList(lane.getTravel());
         List<Lane>mateLaneList = getLeavingLaneList(mateRoadSegment);
         List<Lane>resultLaneList = new ArrayList<Lane>();
-
         int laneIndex= laneList.indexOf(lane);
         int mateCheckIndex = getMateIndexForLane(laneList, laneIndex, mateLaneList, direction);
 
         if(mateCheckIndex >= 0) {
-            int testCheckIndex, laneCheckIndex=-1;
+            int testCheckIndex, laneCheckIndex=laneIndex;
             resultLaneList.add(mateLaneList.get(mateCheckIndex));
             while (true) {
                 testCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT);
@@ -202,6 +207,8 @@ public class Transition {
             }
         }
     }
+
+
 
 
     class RoadSegmentConnection {

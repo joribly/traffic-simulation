@@ -21,7 +21,7 @@ public class TwoThreeTransition {
                 new RoadPoint(rp1).dY(80.0),
                 new RoadPoint(rp1).dY(100.0));
 
-        Transition transition = new Transition();
+        Transition transition = new Transition("T");
         // in order, e.g. clockwise
         transition.addRoadSegment(roadSegment1, End.B);
         transition.addRoadSegment(roadSegment2, End.A);

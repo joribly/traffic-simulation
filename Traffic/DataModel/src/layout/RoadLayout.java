@@ -32,6 +32,14 @@ public enum RoadLayout {
             Lane.createStandardTo(1).setCanGoStraight().setCanChangeLaneRight(),
             Lane.createStandardTo(2).setCanGoStraight().setCanChangeLaneLeft()
     ),
+    FOUR_LANE_DIVIDED_WITH_LEFT_TURN_LANES(
+            Lane.createStandardFrom(3).setCanGoStraight().setCanChangeLaneLeft().setCanGoRight(),
+            Lane.createStandardFrom(2).setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
+            Lane.createStandardFrom(1).setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo(1).setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo(2).setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
+            Lane.createStandardTo(3).setCanGoStraight().setCanChangeLaneLeft().setCanGoRight()
+    ),
     FOUR_LANE_DIVIDED_PLUS_TO_ON_OFF_RAMP_LANE(
             Lane.createStandardFrom(2).setCanGoStraight().setCanChangeLaneLeft(),
             Lane.createStandardFrom(1).setCanGoStraight().setCanChangeLaneRight(),

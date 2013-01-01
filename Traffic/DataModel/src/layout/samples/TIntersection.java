@@ -42,7 +42,7 @@ public class TIntersection {
                 RoadLayout.DEAD_END,
                 new RoadPoint(rp2).dX(60.0));
 
-        Transition transition = new Transition();
+        Transition transition = new Transition("T");
         // in order, e.g. clockwise
         transition.addRoadSegment(roadSegment1, End.B);
         transition.addRoadSegment(roadSegment3, End.B);

@@ -14,19 +14,23 @@ public class RoadSegment {
     private final HashMap<End, Transition> transitionMap;
     private final int id;
 
-    public RoadSegment(RoadLayout aLayout, RoadPoint ... points) {
+    public RoadSegment(RoadLayout aLayout) {
         pointList = new ArrayList<RoadPoint>();
         transitionMap = new HashMap<End, Transition>();
         layout = aLayout;
-        addRoadPoints(points);
         id = ++_id;
+    }
+
+    public RoadSegment(RoadLayout aLayout, RoadPoint ... points) {
+        this(aLayout);
+        addRoadPoints(points);
     }
 
     public int getId() {
         return id;
     }
 
-    private void addRoadPoints(RoadPoint ... points) {
+    public void addRoadPoints(RoadPoint ... points) {
         Collections.addAll(pointList, points);
     }
 

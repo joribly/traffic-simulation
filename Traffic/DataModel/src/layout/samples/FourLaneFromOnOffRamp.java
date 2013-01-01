@@ -53,8 +53,8 @@ public class FourLaneFromOnOffRamp {
         RoadSegment deadEnd7 = new RoadSegment(
                 RoadLayout.DEAD_END);
 
-        Transition transitionOn = new Transition();
-        Transition transitionOff = new Transition();
+        Transition transitionOn = new Transition("T-on");
+        Transition transitionOff = new Transition("T-off");
         // in order, e.g. clockwise
         transitionOn.addRoadSegment(roadSegment1, End.B);
         transitionOn.addRoadSegment(deadEnd6, End.A);
