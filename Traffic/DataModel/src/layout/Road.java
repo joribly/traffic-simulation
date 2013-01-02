@@ -42,7 +42,7 @@ public class Road {
 
     public void testTransitions() {
         for(Transition transition: transitions) {
-            System.out.println("Transition: " + transition.getName());
+            System.out.println("\n********************   Transition: " + transition.getName());
             transition.testLaneConnections();
         }
     }
