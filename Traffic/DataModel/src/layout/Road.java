@@ -41,9 +41,16 @@ public class Road {
     }
 
     public void testTransitions() {
+        plot();
         for(Transition transition: transitions) {
-            System.out.println("\n********************   Transition: " + transition.getName());
+//            System.out.println("\n********************   Transition: " + transition.getName());
             transition.testLaneConnections();
+        }
+    }
+
+    public void plot() {
+        for(RoadSegment roadSegment: roadSegmentMap.values()) {
+            roadSegment.plot();
         }
     }
 }

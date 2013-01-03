@@ -32,13 +32,19 @@ public enum RoadLayout {
             Lane.createStandardTo(1).setCanGoStraight().setCanChangeLaneRight(),
             Lane.createStandardTo(2).setCanGoStraight().setCanChangeLaneLeft()
     ),
-    FOUR_LANE_DIVIDED_WITH_LEFT_TURN_LANES(
-            Lane.createStandardFrom(3).setCanGoStraight().setCanChangeLaneLeft().setCanGoRight(),
-            Lane.createStandardFrom(2).setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
-            Lane.createStandardFrom(1).setCanGoLeft().setCanChangeLaneRight(),
+    FOUR_LANE_DIVIDED_WITH_TO_LEFT_TURN_LANE(
+            Lane.createStandardFrom(2).setCanGoStraight().setCanChangeLaneLeft().setCanGoRight(),
+            Lane.createStandardFrom(1).setCanGoStraight().setCanChangeLaneRight(),
             Lane.createStandardTo(1).setCanGoLeft().setCanChangeLaneRight(),
             Lane.createStandardTo(2).setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
             Lane.createStandardTo(3).setCanGoStraight().setCanChangeLaneLeft().setCanGoRight()
+    ),
+    FOUR_LANE_DIVIDED_WITH_FROM_LEFT_TURN_LANE(
+            Lane.createStandardFrom(3).setCanGoStraight().setCanChangeLaneLeft().setCanGoRight(),
+            Lane.createStandardFrom(2).setCanGoStraight().setCanChangeLaneRight().setCanChangeLaneLeft(),
+            Lane.createStandardFrom(1).setCanGoLeft().setCanChangeLaneRight(),
+            Lane.createStandardTo(1).setCanGoStraight().setCanChangeLaneRight(),
+            Lane.createStandardTo(2).setCanGoStraight().setCanChangeLaneLeft().setCanGoRight()
     ),
     FOUR_LANE_DIVIDED_PLUS_TO_ON_OFF_RAMP_LANE(
             Lane.createStandardFrom(2).setCanGoStraight().setCanChangeLaneLeft(),
@@ -119,12 +125,14 @@ public enum RoadLayout {
 
     public double getLaneCenterPointOffset(Lane alane) {
         double offset = 0.0;
-        for(Lane lane: fromLanes) {
-            if(lane == alane) {
-                offset += lane.getWidth()/2.0;
+        Lane fromLane;
+        for(int i=(fromLanes.size()-1); i>= 0; i--) {
+            fromLane = fromLanes.get(i);
+            if(fromLane == alane) {
+                offset += fromLane.getWidth()/2.0;
                 return offset;
             }
-            offset += alane.getWidth();
+            offset += fromLane.getWidth();
         }
         for(Lane lane: toLanes) {
             if(lane == alane) {

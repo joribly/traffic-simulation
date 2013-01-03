@@ -1,10 +1,12 @@
 package layout;
 
-import com.sun.servicetag.SystemEnvironment;
+import sun.security.tools.policytool.PolicyTool;
 
 import java.util.*;
 
 public class Transition {
+
+    private static boolean debug=false;
 
     private final Map<RoadSegment, RoadSegmentConnection> roadSegmentConnectionMap;
     private RoadSegmentConnection previousRoadSegmentConnection;
@@ -175,7 +177,7 @@ public class Transition {
         End end,turnEnd;
         List<Lane>laneList,turnLaneList,straightLaneList;
         for(RoadSegment roadSegment : roadSegmentConnectionMap.keySet()) {
-            System.out.println("\n" + roadSegment);
+            if(debug==true)System.out.println("\n" + roadSegment);
             end = getEnd(roadSegment);
             laneList = getEnteringLaneList(roadSegment);
             for(Lane lane: laneList) {
@@ -185,7 +187,7 @@ public class Transition {
                        if(lane.isInner()) {
                            laneList = roadSegment.getUTurnLaneList(lane.getTravel());
                            for(Lane uTurnLane: laneList) {
-                               System.out.println("lane " + lane.getId() + ": U-Turn   to roadSegment " + roadSegment.getId() + " lane " + uTurnLane + " (end=" + end + ")");
+                               if(debug==true)System.out.println("lane " + lane.getId() + ": U-Turn   to roadSegment " + roadSegment.getId() + " lane " + uTurnLane + " (end=" + end + ")");
                            }
                        }
                        turnRoadSegment = roadSegment;
@@ -193,7 +195,7 @@ public class Transition {
                            turnEnd = getEnd(turnRoadSegment);
                            turnLaneList = getPossibleLaneList(roadSegment, lane, turnRoadSegment, Direction.LEFT);
                            for(Lane leftTurnLane: turnLaneList) {
-                               System.out.println("lane " + lane.getId() + ": L-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + leftTurnLane + " (end=" + turnEnd + ")");
+                               if(debug==true)System.out.println("lane " + lane.getId() + ": L-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + leftTurnLane + " (end=" + turnEnd + ")");
                                plot(roadSegment, lane, end, turnRoadSegment, leftTurnLane, turnEnd);
                            }
                        }
@@ -202,7 +204,7 @@ public class Transition {
                        straightLaneList = getPossibleLaneList(roadSegment, lane, getMateRoadSegment(roadSegment), Direction.STRAIGHT);
                        End mateEnd = getEnd(mateRoadSegment);
                        for(Lane straightLane: straightLaneList) {
-                           System.out.println("lane " + lane.getId() + ": Straight to roadSegment " + mateRoadSegment.getId() + " lane " + straightLane + " (end=" +  mateEnd + ")");
+                           if(debug==true)System.out.println("lane " + lane.getId() + ": Straight to roadSegment " + mateRoadSegment.getId() + " lane " + straightLane + " (end=" +  mateEnd + ")");
                            plot(roadSegment, lane, end, getMateRoadSegment(roadSegment), straightLane, mateEnd);
                        }
                    }
@@ -212,7 +214,7 @@ public class Transition {
                            turnEnd = getEnd(turnRoadSegment);
                            turnLaneList = getPossibleLaneList(roadSegment, lane, turnRoadSegment, Direction.RIGHT);
                            for(Lane rightTurnLane: turnLaneList) {
-                               System.out.println("lane " + lane.getId() + ": R-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + rightTurnLane + " (end=" + turnEnd + ")");
+                               if(debug==true)System.out.println("lane " + lane.getId() + ": R-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + rightTurnLane + " (end=" + turnEnd + ")");
                                plot(roadSegment,lane,end,turnRoadSegment,rightTurnLane,turnEnd);
                            }
                        }
@@ -223,9 +225,9 @@ public class Transition {
     }
 
     private void plot(RoadSegment roadSegment, Lane lane, End end, RoadSegment mateRoadSegment, Lane mateLane, End mateEnd) {
-        System.out.println("... ");
-        roadSegment.plot(lane,end);
-        mateRoadSegment.plot(mateLane, mateEnd);
+        double [] xy1 = roadSegment.getLaneEndXYLocation(lane, end);
+        double [] xy2 = mateRoadSegment.getLaneEndXYLocation(mateLane, mateEnd);
+        Plot.line(xy1, xy2, lane.getColor());
     }
 
 

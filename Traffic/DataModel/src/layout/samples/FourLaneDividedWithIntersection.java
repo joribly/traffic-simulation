@@ -2,6 +2,8 @@ package layout.samples;
 
 import layout.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 public class FourLaneDividedWithIntersection {
@@ -29,15 +31,15 @@ public class FourLaneDividedWithIntersection {
          *                 5
          */
 
-        RoadPoint rp1 = new RoadPoint(0.0,0.0,0.0,1.0,0.0,0.0);
+        RoadPoint rp1 = new RoadPoint(0.0,0.0,0.0,0.0,-1.0,0.0);
 
         Transition intersection = new Transition("Broad and Lee");
 
         Road broadStreet = new Road("Broad Street")
                 .addNewSegment("westBase", RoadLayout.FOUR_LANE_DIVIDED)
-                .addNewSegment("westIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_LEFT_TURN_LANES)
+                .addNewSegment("westIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_TO_LEFT_TURN_LANE)
                 .addTransition(intersection)
-                .addNewSegment("eastIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_LEFT_TURN_LANES)
+                .addNewSegment("eastIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_FROM_LEFT_TURN_LANE)
                 .addNewSegment("eastBase", RoadLayout.FOUR_LANE_DIVIDED);
 
         broadStreet.getRoadSegment("westBase").addRoadPoints(
@@ -56,13 +58,13 @@ public class FourLaneDividedWithIntersection {
                 new RoadPoint(rp1).dX(70.0),
                 new RoadPoint(rp1).dX(80.0));
 
-        RoadPoint rp2 = new RoadPoint(rp1).dX(40.0).dY(-40.0).dA(90.0);
+        RoadPoint rp2 = new RoadPoint(rp1).dX(40.0).dY(-50.0).dA(90.0);
 
         Road leeHighway = new Road("Lee Highway")
                 .addNewSegment("southBase", RoadLayout.FOUR_LANE_DIVIDED)
-                .addNewSegment("southIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_LEFT_TURN_LANES)
+                .addNewSegment("southIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_TO_LEFT_TURN_LANE)
                 .addTransition(intersection)
-                .addNewSegment("northIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_LEFT_TURN_LANES)
+                .addNewSegment("northIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_FROM_LEFT_TURN_LANE)
                 .addNewSegment("northBase", RoadLayout.FOUR_LANE_DIVIDED);
 
         leeHighway.getRoadSegment("southBase").addRoadPoints(
@@ -82,9 +84,9 @@ public class FourLaneDividedWithIntersection {
                 new RoadPoint(rp2).dY(80.0));
 
         intersection
-                .addRoadSegment(leeHighway.getRoadSegment("southIntersection"), End.A)
+                .addRoadSegment(leeHighway.getRoadSegment("southIntersection"), End.B)
                 .addRoadSegment(broadStreet.getRoadSegment("westIntersection"), End.B)
-                .addRoadSegment(leeHighway.getRoadSegment("northIntersection"), End.B)
+                .addRoadSegment(leeHighway.getRoadSegment("northIntersection"), End.A)
                 .addRoadSegment(broadStreet.getRoadSegment("eastIntersection"), End.A);
 
         intersection.mate(
@@ -95,7 +97,11 @@ public class FourLaneDividedWithIntersection {
                 broadStreet.getRoadSegment("eastIntersection"),
                 broadStreet.getRoadSegment("westIntersection"));
 
+        Plot.init();
+        Plot.out("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">");
         broadStreet.testTransitions();
         leeHighway.testTransitions();
+        Plot.out("</svg>");
+        Plot.close();
     }
 }

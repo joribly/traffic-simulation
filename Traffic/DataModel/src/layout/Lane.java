@@ -10,11 +10,23 @@ public class Lane {
     private Travel travel;
     private double width;
     private final int id;
+    private static String [] colors = new String[] {
+            "255,255,255",
+            "255,0,0",
+            "0,255,0",
+            "0,0,255",
+            "255,255,0",
+            "0,255,255",
+
+    };
 
     private Lane(int laneId) {
         id = laneId;
     }
 
+    public String getColor() {
+        return colors[id];
+    }
     public String getId() {
         return "" + id + travel.name().charAt(0);
     }
