@@ -20,16 +20,24 @@ public class Lane {
     }
 
     public static Lane createStandardTo(int laneId) {
-        return (new Lane(laneId)).setWidth(20.0).travel(Travel.TO);
+        return (new Lane(laneId)).setWidth(2.0).travel(Travel.TO);
     }
 
     public static Lane createStandardFrom(int laneId) {
-        return (new Lane(laneId)).setWidth(20.0).travel(Travel.FROM);
+        return (new Lane(laneId)).setWidth(2.0).travel(Travel.FROM);
     }
 
     Lane travel(Travel travel) {
         this.travel = travel;
         return this;
+    }
+
+    public boolean canGo(Direction direction) {
+        if(direction.equals(Direction.ALL) && (canGoStraight() || canGoLeft() || canGoRight()))return true;
+        if(direction.equals(Direction.STRAIGHT) && canGoStraight())return true;
+        if(direction.equals(Direction.LEFT) && canGoLeft())return true;
+        if(direction.equals(Direction.RIGHT) && canGoRight())return true;
+        return false;
     }
 
     public Lane setCanGoLeft() {

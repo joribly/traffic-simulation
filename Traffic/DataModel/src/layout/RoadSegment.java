@@ -76,4 +76,10 @@ public class RoadSegment {
         return sb.toString();
     }
 
+    public void plot(Lane lane, End end) {
+        RoadPoint point = getEndPoint(end);
+        double offset = layout.getLaneCenterPointOffset(lane);
+        point.plotLocation(offset);
+
+    }
 }

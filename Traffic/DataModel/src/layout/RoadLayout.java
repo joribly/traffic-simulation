@@ -117,4 +117,22 @@ public enum RoadLayout {
         return sb.toString();
     }
 
+    public double getLaneCenterPointOffset(Lane alane) {
+        double offset = 0.0;
+        for(Lane lane: fromLanes) {
+            if(lane == alane) {
+                offset += lane.getWidth()/2.0;
+                return offset;
+            }
+            offset += alane.getWidth();
+        }
+        for(Lane lane: toLanes) {
+            if(lane == alane) {
+                offset += lane.getWidth()/2.0;
+                return offset;
+            }
+            offset += alane.getWidth();
+        }
+        return offset;
+    }
 }

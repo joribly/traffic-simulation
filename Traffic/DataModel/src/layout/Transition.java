@@ -96,9 +96,15 @@ public class Transition {
             int testCheckIndex, laneCheckIndex=laneIndex;
             resultLaneList.add(mateLaneList.get(mateCheckIndex));
             while (true) {
-                testCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT);
-                laneCheckIndex = getNextLaneIndex(laneList, laneCheckIndex, direction);
 
+                if(laneIndex == 0) { // innermost, pick up all left turn lanes and 1st straight  lane
+                    testCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.ALL);
+                    if(mateLaneList.get(mateCheckIndex).canGoStraight())break;
+                }
+                else {
+                    testCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT, Direction.RIGHT);
+                    laneCheckIndex = getNextLaneIndex(laneList, laneCheckIndex, direction);
+                }
                 if(testCheckIndex == mateCheckIndex)break;
                 if(laneCheckIndex != laneIndex)break;
 
@@ -114,18 +120,23 @@ public class Transition {
         int mateCheckIndex = -1;
         do {
             laneCheckIndex = getNextLaneIndex(laneList, laneCheckIndex, direction);
-            mateCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT);
+            if(laneIndex == 0) {
+                mateCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.ALL);
+            }
+            else {
+                mateCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT, Direction.RIGHT);
+            }
         }while(laneCheckIndex != laneIndex);
         return mateCheckIndex;
     }
 
-    private int getNextLaneIndex(List<Lane>lanes, int index, Direction direction) {
+    private int getNextLaneIndex(List<Lane>lanes, int index, Direction ... directions) {
         // returns next index, until no more, then returns the input value
         int oldIndex = index;
         for(int i = ++index; i< lanes.size(); i++) {
-            if(direction == Direction.STRAIGHT && lanes.get(i).canGoStraight())return i;
-            else if(direction == Direction.LEFT && lanes.get(i).canGoLeft())return i;
-            else if(direction == Direction.RIGHT && lanes.get(i).canGoRight())return i;
+            for(Direction direction: directions) {
+               if(lanes.get(i).canGo(direction))return i;
+            }
         }
         return oldIndex;
     }
@@ -183,6 +194,7 @@ public class Transition {
                            turnLaneList = getPossibleLaneList(roadSegment, lane, turnRoadSegment, Direction.LEFT);
                            for(Lane leftTurnLane: turnLaneList) {
                                System.out.println("lane " + lane.getId() + ": L-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + leftTurnLane + " (end=" + turnEnd + ")");
+                               plot(roadSegment, lane, end, turnRoadSegment, leftTurnLane, turnEnd);
                            }
                        }
                    }
@@ -191,6 +203,7 @@ public class Transition {
                        End mateEnd = getEnd(mateRoadSegment);
                        for(Lane straightLane: straightLaneList) {
                            System.out.println("lane " + lane.getId() + ": Straight to roadSegment " + mateRoadSegment.getId() + " lane " + straightLane + " (end=" +  mateEnd + ")");
+                           plot(roadSegment, lane, end, getMateRoadSegment(roadSegment), straightLane, mateEnd);
                        }
                    }
                    if(lane.canGoRight()) {
@@ -200,6 +213,7 @@ public class Transition {
                            turnLaneList = getPossibleLaneList(roadSegment, lane, turnRoadSegment, Direction.RIGHT);
                            for(Lane rightTurnLane: turnLaneList) {
                                System.out.println("lane " + lane.getId() + ": R-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + rightTurnLane + " (end=" + turnEnd + ")");
+                               plot(roadSegment,lane,end,turnRoadSegment,rightTurnLane,turnEnd);
                            }
                        }
                    }
@@ -208,7 +222,11 @@ public class Transition {
         }
     }
 
-
+    private void plot(RoadSegment roadSegment, Lane lane, End end, RoadSegment mateRoadSegment, Lane mateLane, End mateEnd) {
+        System.out.println("... ");
+        roadSegment.plot(lane,end);
+        mateRoadSegment.plot(mateLane, mateEnd);
+    }
 
 
     class RoadSegmentConnection {
