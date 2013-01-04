@@ -52,7 +52,7 @@ public class TIntersection {
         transition.mate(roadSegment1, roadSegment2);
         transition.mate(roadSegment3, roadSegment4);
 
-        transition.testLaneConnections();
+        transition.defineLaneConnections();
 
     }
 }

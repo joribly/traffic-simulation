@@ -2,10 +2,6 @@ package layout.samples;
 
 import layout.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.List;
-
 public class FourLaneDividedWithIntersection {
 
 
@@ -97,11 +93,9 @@ public class FourLaneDividedWithIntersection {
                 broadStreet.getRoadSegment("eastIntersection"),
                 broadStreet.getRoadSegment("westIntersection"));
 
-        Plot.init();
-        Plot.out("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">");
-        broadStreet.testTransitions();
-        leeHighway.testTransitions();
-        Plot.out("</svg>");
-        Plot.close();
+        broadStreet.defineTransitionLaneConnections();
+        leeHighway.defineTransitionLaneConnections();
+
+        Plot.doIt(broadStreet, leeHighway);
     }
 }

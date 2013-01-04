@@ -2,6 +2,7 @@ package layout;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Road {
 
@@ -40,15 +41,18 @@ public class Road {
         return this;
     }
 
-    public void testTransitions() {
-        plot();
+    public void defineTransitionLaneConnections() {
         for(Transition transition: transitions) {
 //            System.out.println("\n********************   Transition: " + transition.getName());
-            transition.testLaneConnections();
+            transition.defineLaneConnections();
         }
     }
 
-    public void plot() {
+    public List<Transition> getTransitions() {
+        return transitions;
+    }
+
+    public void plotSegments() {
         for(RoadSegment roadSegment: roadSegmentMap.values()) {
             roadSegment.plot();
         }

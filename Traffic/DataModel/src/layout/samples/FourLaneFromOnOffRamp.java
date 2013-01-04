@@ -71,8 +71,8 @@ public class FourLaneFromOnOffRamp {
         transitionOff.mate(deadEnd7, roadSegment5Off);
 
 
-        transitionOn.testLaneConnections();
-        transitionOff.testLaneConnections();
+        transitionOn.defineLaneConnections();
+        transitionOff.defineLaneConnections();
 
     }
 }

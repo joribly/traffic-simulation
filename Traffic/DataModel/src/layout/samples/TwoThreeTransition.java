@@ -28,7 +28,7 @@ public class TwoThreeTransition {
 
         transition.mate(roadSegment1, roadSegment2);
 
-        transition.testLaneConnections();
+        transition.defineLaneConnections();
 
     }
 }

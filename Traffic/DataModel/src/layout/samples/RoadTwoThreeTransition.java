@@ -25,6 +25,6 @@ public class RoadTwoThreeTransition {
                 new RoadPoint(rp1).dY(80.0),
                 new RoadPoint(rp1).dY(100.0));
 
-        road.testTransitions();
+        road.defineTransitionLaneConnections();
     }
 }

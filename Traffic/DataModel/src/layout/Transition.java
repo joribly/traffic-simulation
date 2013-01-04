@@ -12,9 +12,12 @@ public class Transition {
     private RoadSegmentConnection previousRoadSegmentConnection;
     private RoadSegmentConnection firstRoadSegmentConnection;
     private String name;
+    private ArrayList<Choice>choices;
+
 
     public Transition(String name) {
         roadSegmentConnectionMap = new LinkedHashMap<RoadSegment, RoadSegmentConnection>();
+        choices = new ArrayList<Choice>();
         firstRoadSegmentConnection = previousRoadSegmentConnection = null;
         this.name = name;
     }
@@ -173,49 +176,55 @@ public class Transition {
         return sb.toString();
     }
 
-    public void testLaneConnections() {
+    public void plot() {
+        for(Choice choice: choices) {
+            choice.plot();
+        }
+    }
+
+    public void defineLaneConnections() {
         End end,turnEnd;
-        List<Lane>laneList,turnLaneList,straightLaneList;
+        List<Lane>enteringLaneList,straightLaneList,leftTurnLaneList,rightTurnLaneList,uTurnLaneList;
         for(RoadSegment roadSegment : roadSegmentConnectionMap.keySet()) {
             if(debug==true)System.out.println("\n" + roadSegment);
             end = getEnd(roadSegment);
-            laneList = getEnteringLaneList(roadSegment);
-            for(Lane lane: laneList) {
-               if(roadSegmentLaneHasChoices(roadSegment, lane)) {
+            enteringLaneList = getEnteringLaneList(roadSegment);
+            for(Lane enteringLane: enteringLaneList) {
+               if(roadSegmentLaneHasChoices(roadSegment, enteringLane)) {
                    RoadSegment turnRoadSegment, mateRoadSegment = getMateRoadSegment(roadSegment);
-                   if(lane.canGoLeft()) {
-                       if(lane.isInner()) {
-                           laneList = roadSegment.getUTurnLaneList(lane.getTravel());
-                           for(Lane uTurnLane: laneList) {
-                               if(debug==true)System.out.println("lane " + lane.getId() + ": U-Turn   to roadSegment " + roadSegment.getId() + " lane " + uTurnLane + " (end=" + end + ")");
+                   if(enteringLane.canGoLeft()) {
+                       if(enteringLane.isInner()) {
+                           uTurnLaneList = roadSegment.getUTurnLaneList(enteringLane.getTravel());
+                           for(Lane uTurnLane: uTurnLaneList) {
+                               if(debug==true)System.out.println("lane " + enteringLane.getId() + ": U-Turn   to roadSegment " + roadSegment.getId() + " lane " + uTurnLane + " (end=" + end + ")");
                            }
                        }
                        turnRoadSegment = roadSegment;
                        while((turnRoadSegment = nextRoadSegment(turnRoadSegment)) != mateRoadSegment)  {
                            turnEnd = getEnd(turnRoadSegment);
-                           turnLaneList = getPossibleLaneList(roadSegment, lane, turnRoadSegment, Direction.LEFT);
-                           for(Lane leftTurnLane: turnLaneList) {
-                               if(debug==true)System.out.println("lane " + lane.getId() + ": L-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + leftTurnLane + " (end=" + turnEnd + ")");
-                               plot(roadSegment, lane, end, turnRoadSegment, leftTurnLane, turnEnd);
+                           leftTurnLaneList = getPossibleLaneList(roadSegment, enteringLane, turnRoadSegment, Direction.LEFT);
+                           for(Lane leftTurnLane: leftTurnLaneList) {
+                               if(debug==true)System.out.println("lane " + enteringLane.getId() + ": L-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + leftTurnLane + " (end=" + turnEnd + ")");
+                               choices.add(new Choice(roadSegment, enteringLane, end, turnRoadSegment, leftTurnLane, turnEnd));
                            }
                        }
                    }
-                   if(lane.canGoStraight()) {
-                       straightLaneList = getPossibleLaneList(roadSegment, lane, getMateRoadSegment(roadSegment), Direction.STRAIGHT);
+                   if(enteringLane.canGoStraight()) {
+                       straightLaneList = getPossibleLaneList(roadSegment, enteringLane, getMateRoadSegment(roadSegment), Direction.STRAIGHT);
                        End mateEnd = getEnd(mateRoadSegment);
                        for(Lane straightLane: straightLaneList) {
-                           if(debug==true)System.out.println("lane " + lane.getId() + ": Straight to roadSegment " + mateRoadSegment.getId() + " lane " + straightLane + " (end=" +  mateEnd + ")");
-                           plot(roadSegment, lane, end, getMateRoadSegment(roadSegment), straightLane, mateEnd);
+                           if(debug==true)System.out.println("lane " + enteringLane.getId() + ": Straight to roadSegment " + mateRoadSegment.getId() + " lane " + straightLane + " (end=" +  mateEnd + ")");
+                           choices.add(new Choice(roadSegment, enteringLane, end, getMateRoadSegment(roadSegment), straightLane, mateEnd));
                        }
                    }
-                   if(lane.canGoRight()) {
+                   if(enteringLane.canGoRight()) {
                        turnRoadSegment = roadSegment;
                        while((turnRoadSegment = previousRoadSegment(turnRoadSegment)) != mateRoadSegment)  {
                            turnEnd = getEnd(turnRoadSegment);
-                           turnLaneList = getPossibleLaneList(roadSegment, lane, turnRoadSegment, Direction.RIGHT);
-                           for(Lane rightTurnLane: turnLaneList) {
-                               if(debug==true)System.out.println("lane " + lane.getId() + ": R-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + rightTurnLane + " (end=" + turnEnd + ")");
-                               plot(roadSegment,lane,end,turnRoadSegment,rightTurnLane,turnEnd);
+                           rightTurnLaneList = getPossibleLaneList(roadSegment, enteringLane, turnRoadSegment, Direction.RIGHT);
+                           for(Lane rightTurnLane: rightTurnLaneList) {
+                               if(debug==true)System.out.println("lane " + enteringLane.getId() + ": R-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + rightTurnLane + " (end=" + turnEnd + ")");
+                               choices.add(new Choice(roadSegment, enteringLane, end, turnRoadSegment, rightTurnLane, turnEnd));
                            }
                        }
                    }
@@ -224,12 +233,36 @@ public class Transition {
         }
     }
 
-    private void plot(RoadSegment roadSegment, Lane lane, End end, RoadSegment mateRoadSegment, Lane mateLane, End mateEnd) {
-        double [] xy1 = roadSegment.getLaneEndXYLocation(lane, end);
-        double [] xy2 = mateRoadSegment.getLaneEndXYLocation(mateLane, mateEnd);
-        Plot.line(xy1, xy2, lane.getColor());
+    class Choice {
+
+        ChoicePoint fromPoint,toPoint;
+        public Choice(
+                RoadSegment roadSegmentFrom, Lane laneFrom, End endFrom,
+                RoadSegment roadSegmentTo, Lane laneTo, End endTo) {
+             fromPoint = new ChoicePoint(roadSegmentFrom, laneFrom, endFrom);
+             toPoint = new ChoicePoint(roadSegmentTo, laneTo, endTo);
+
+        }
+
+        private void plot() {
+            double [] xy1 = fromPoint.roadSegment.getLaneEndXYLocation(fromPoint.lane, fromPoint.end);
+            double [] xy2 = toPoint.roadSegment.getLaneEndXYLocation(toPoint.lane, toPoint.end);
+            Plot.line(xy1, xy2, fromPoint.lane.getColor());
+        }
+
     }
 
+    class ChoicePoint {
+        private RoadSegment roadSegment;
+        private Lane lane;
+        private End end;
+
+        public ChoicePoint(RoadSegment roadSegment, Lane lane, End end) {
+            this.roadSegment = roadSegment;
+            this.lane = lane;
+            this.end = end;
+        }
+    }
 
     class RoadSegmentConnection {
         private final RoadSegment roadSegment;

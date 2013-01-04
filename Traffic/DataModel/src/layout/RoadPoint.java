@@ -74,6 +74,6 @@ public class RoadPoint {
     public double [] getXYLocation(double offset) {
 
         Vector3D delta = orientation.scalarMultiply(offset);
-        return new double[] {10*(origin.x + delta.getX()), -10*(origin.y + delta.getY())} ;
+        return new double[] {10*(origin.x + delta.getX()), 300 -10*(origin.y + delta.getY())} ;
     }
 }
