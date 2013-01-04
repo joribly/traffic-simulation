@@ -57,11 +57,15 @@ public class FourLaneDividedWithIntersection {
         RoadPoint rp2 = new RoadPoint(rp1).dX(40.0).dY(-50.0).dA(90.0);
 
         Road leeHighway = new Road("Lee Highway")
-                .addNewSegment("southBase", RoadLayout.FOUR_LANE_DIVIDED)
+                .addNewSegment("southDeadEnd", RoadLayout.DEAD_END)
+                .addNewSegment("southBase", RoadLayout.FOUR_LANE_STD)
                 .addNewSegment("southIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_TO_LEFT_TURN_LANE)
                 .addTransition(intersection)
                 .addNewSegment("northIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_FROM_LEFT_TURN_LANE)
                 .addNewSegment("northBase", RoadLayout.FOUR_LANE_DIVIDED);
+
+        leeHighway.getRoadSegment("southDeadEnd").addRoadPoints(
+                new RoadPoint(rp2));
 
         leeHighway.getRoadSegment("southBase").addRoadPoints(
                 new RoadPoint(rp2).dY(10.0),
@@ -93,9 +97,41 @@ public class FourLaneDividedWithIntersection {
                 broadStreet.getRoadSegment("eastIntersection"),
                 broadStreet.getRoadSegment("westIntersection"));
 
+        Transition southIntersection = new Transition("South and Lee");
+
+        Road southStreet = new Road("South Street")
+                .addNewSegment("southWest", RoadLayout.TWO_LANE_STD)
+                .addTransition(southIntersection)
+                .addNewSegment("southEast", RoadLayout.TWO_LANE_STD);
+
+        RoadPoint rp3 = new RoadPoint(rp1).dY(-40.0);
+
+        southStreet.getRoadSegment("southWest").addRoadPoints(
+                new RoadPoint(rp3).dX(10.0),
+                new RoadPoint(rp3).dX(40.0));
+
+        southStreet.getRoadSegment("southEast").addRoadPoints(
+                new RoadPoint(rp3).dX(48.0),
+                new RoadPoint(rp3).dX(80.0));
+
+        southIntersection
+                .addRoadSegment(southStreet.getRoadSegment("southWest"), End.B)
+                .addRoadSegment(leeHighway.getRoadSegment("southBase"), End.A)
+                .addRoadSegment(southStreet.getRoadSegment("southEast"), End.A)
+                .addRoadSegment(leeHighway.getRoadSegment("southDeadEnd"), End.B);
+
+        southIntersection.mate(
+                southStreet.getRoadSegment("southWest"),
+                southStreet.getRoadSegment("southEast"));
+
+        southIntersection.mate(
+                leeHighway.getRoadSegment("southDeadEnd"),
+                leeHighway.getRoadSegment("southBase"));
+
         broadStreet.defineTransitionLaneConnections();
         leeHighway.defineTransitionLaneConnections();
+        southStreet.defineTransitionLaneConnections();
 
-        Plot.doIt(broadStreet, leeHighway);
+        Plot.doIt(broadStreet, leeHighway, southStreet);
     }
 }
