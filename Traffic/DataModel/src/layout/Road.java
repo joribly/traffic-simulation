@@ -18,6 +18,11 @@ public class Road {
         this.name = name;
     }
 
+    public Road addNewSegment(String name, RoadLayout layout, RoadPoint ... points)  {
+        addNewSegment(name, layout).lastRoadSegment.addRoadPoints(points);
+        return this;
+    }
+
     public Road addNewSegment(String name, RoadLayout layout) {
         RoadSegment roadSegment = new RoadSegment(layout);
         if(roadSegmentMap.size() > transitions.size()) {

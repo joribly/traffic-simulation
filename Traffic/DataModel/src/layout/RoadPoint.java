@@ -17,6 +17,10 @@ public class RoadPoint {
         id = ++_id;
     }
 
+    public RoadPoint clone() {
+        return new RoadPoint(this);
+    }
+
     public RoadPoint(double x, double y, double z, double vx, double vy, double vz) {
         origin = new Point3d(x, y, z);
         orientation = new Vector3D(vx, vy, vz);
@@ -31,16 +35,28 @@ public class RoadPoint {
     }
 
     public RoadPoint dX(double dx) {
+        return clone()._dX(dx);
+    }
+
+    public RoadPoint dY(double dy) {
+        return clone()._dY(dy);
+    }
+
+    public RoadPoint dA(double da) {
+        return clone()._dA(da);
+    }
+
+    private RoadPoint _dX(double dx) {
         shiftOrigin(dx, 0.0, 0.0);
         return this;
     }
 
-    public RoadPoint dY(double dy) {
+    private RoadPoint _dY(double dy) {
         shiftOrigin(0.0, dy, 0.0);
         return this;
     }
 
-    public RoadPoint dA(double da) {
+    private RoadPoint _dA(double da) {
         orientation = new Vector3D(orientation.getAlpha() + Math.toRadians(da) , 0.0);
         return this;
     }

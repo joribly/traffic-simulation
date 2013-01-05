@@ -29,76 +29,66 @@ public class FourLaneDividedWithIntersection {
          */
 
         RoadPoint rp1 = new RoadPoint(0.0,0.0,0.0,0.0,-1.0,0.0);
-        RoadPoint rp2 = new RoadPoint(rp1).dX(40.0).dY(-50.0).dA(90.0);
-        RoadPoint rp3 = new RoadPoint(rp1).dY(-40.0);
+        RoadPoint rp2 = rp1.dX(40.0).dY(-50.0).dA(90.0);
+        RoadPoint rp3 = rp1.dY(-40.0);
 
         Transition intersection = new Transition("Broad and Lee");
         Transition southIntersection = new Transition("South and Lee");
 
         Road leeHighway = new Road("Lee Highway")
-                .addNewSegment("southDeadEnd", RoadLayout.DEAD_END)
+                .addNewSegment(
+                        "southDeadEnd",
+                        RoadLayout.DEAD_END,
+                        rp2)
                 .addTransition(southIntersection)
-                .addNewSegment("southBase", RoadLayout.FOUR_LANE_STD)
-                .addNewSegment("southIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_TO_LEFT_TURN_LANE)
+                .addNewSegment(
+                        "southBase",
+                        RoadLayout.FOUR_LANE_STD,
+                        rp2.dY(10.0), rp2.dY(20.0))
+                .addNewSegment(
+                        "southIntersection",
+                        RoadLayout.FOUR_LANE_DIVIDED_WITH_TO_LEFT_TURN_LANE,
+                        rp2.dY(30.0), rp2.dY(40.0))
                 .addTransition(intersection)
-                .addNewSegment("northIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_FROM_LEFT_TURN_LANE)
-                .addNewSegment("northBase", RoadLayout.FOUR_LANE_DIVIDED);
+                .addNewSegment(
+                        "northIntersection",
+                        RoadLayout.FOUR_LANE_DIVIDED_WITH_FROM_LEFT_TURN_LANE,
+                        rp2.dY(50.0), rp2.dY(60.0))
+                .addNewSegment(
+                        "northBase",
+                        RoadLayout.FOUR_LANE_DIVIDED,
+                        rp2.dY(70.0), rp2.dY(80.0));
 
-        leeHighway.getRoadSegment("southDeadEnd").addRoadPoints(
-                new RoadPoint(rp2));
-
-        leeHighway.getRoadSegment("southBase").addRoadPoints(
-                new RoadPoint(rp2).dY(10.0),
-                new RoadPoint(rp2).dY(20.0));
-
-        leeHighway.getRoadSegment("southIntersection").addRoadPoints(
-                new RoadPoint(rp2).dY(30.0),
-                new RoadPoint(rp2).dY(40.0));
-
-        leeHighway.getRoadSegment("northIntersection").addRoadPoints(
-                new RoadPoint(rp2).dY(50.0),
-                new RoadPoint(rp2).dY(60.0));
-
-        leeHighway.getRoadSegment("northBase").addRoadPoints(
-                new RoadPoint(rp2).dY(70.0),
-                new RoadPoint(rp2).dY(80.0));
 
         Road broadStreet = new Road("Broad Street")
-                .addNewSegment("westBase", RoadLayout.FOUR_LANE_DIVIDED)
-                .addNewSegment("westIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_TO_LEFT_TURN_LANE)
+                .addNewSegment(
+                        "westBase",
+                        RoadLayout.FOUR_LANE_DIVIDED,
+                        rp1.dX(10.0), rp1.dX(20.0))
+                .addNewSegment(
+                        "westIntersection",
+                        RoadLayout.FOUR_LANE_DIVIDED_WITH_TO_LEFT_TURN_LANE,
+                        rp1.dX(30.0), rp1.dX(40.0))
                 .addTransition(intersection)
-                .addNewSegment("eastIntersection", RoadLayout.FOUR_LANE_DIVIDED_WITH_FROM_LEFT_TURN_LANE)
-                .addNewSegment("eastBase", RoadLayout.FOUR_LANE_DIVIDED);
-
-        broadStreet.getRoadSegment("westBase").addRoadPoints(
-                new RoadPoint(rp1).dX(10.0),
-                new RoadPoint(rp1).dX(20.0));
-
-        broadStreet.getRoadSegment("westIntersection").addRoadPoints(
-                new RoadPoint(rp1).dX(30.0),
-                new RoadPoint(rp1).dX(40.0));
-
-        broadStreet.getRoadSegment("eastIntersection").addRoadPoints(
-                new RoadPoint(rp1).dX(50.0),
-                new RoadPoint(rp1).dX(60.0));
-
-        broadStreet.getRoadSegment("eastBase").addRoadPoints(
-                new RoadPoint(rp1).dX(70.0),
-                new RoadPoint(rp1).dX(80.0));
+                .addNewSegment(
+                        "eastIntersection",
+                        RoadLayout.FOUR_LANE_DIVIDED_WITH_FROM_LEFT_TURN_LANE,
+                        rp1.dX(50.0), rp1.dX(60.0))
+                .addNewSegment(
+                        "eastBase",
+                        RoadLayout.FOUR_LANE_DIVIDED,
+                        rp1.dX(70.0), rp1.dX(80.0));
 
         Road southStreet = new Road("South Street")
-                .addNewSegment("southWest", RoadLayout.TWO_LANE_STD)
+                .addNewSegment(
+                        "southWest",
+                        RoadLayout.TWO_LANE_STD,
+                        rp3.dX(10.0), rp3.dX(40.0))
                 .addTransition(southIntersection)
-                .addNewSegment("southEast", RoadLayout.TWO_LANE_STD);
-
-
-        southStreet.getRoadSegment("southWest").addRoadPoints(
-                new RoadPoint(rp3).dX(10.0),
-                new RoadPoint(rp3).dX(40.0));
-
-        southStreet.getRoadSegment("southEast").addRoadPoints(
-                new RoadPoint(rp3).dX(48.0),
-                new RoadPoint(rp3).dX(80.0));
+                .addNewSegment(
+                        "southEast",
+                        RoadLayout.TWO_LANE_STD,
+                        rp3.dX(48.0), rp3.dX(80));
 
         broadStreet.defineTransitionLaneConnections();
         leeHighway.defineTransitionLaneConnections();
