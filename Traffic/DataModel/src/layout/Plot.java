@@ -35,7 +35,9 @@ public class Plot {
 
     public static void doIt(Road ... roads) {
         Plot.init();
-        Plot.out("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">");
+        Plot.out("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\">");
+        Plot.out("<script xlink:href=\"SVGPan.js\"/>");
+        Plot.out("<g id=\"viewport\" transform=\"translate(0,0)\">");
         HashSet<Transition>transitions = new HashSet<Transition>();
         for(Road road:  roads) {
             road.plotSegments();
@@ -46,6 +48,7 @@ public class Plot {
         for(Transition transition: transitions) {
             transition.plot();
         }
+        Plot.out("</g>");
         Plot.out("</svg>");
         Plot.close();
     }

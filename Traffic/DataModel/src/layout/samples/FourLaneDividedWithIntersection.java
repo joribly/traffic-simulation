@@ -88,7 +88,7 @@ public class FourLaneDividedWithIntersection {
                 .addNewSegment(
                         "southEast",
                         RoadLayout.TWO_LANE_STD,
-                        rp3.dX(48.0), rp3.dX(80));
+                        rp3.dX(50.0), rp3.dX(80));
 
         broadStreet.defineTransitionLaneConnections();
         leeHighway.defineTransitionLaneConnections();
