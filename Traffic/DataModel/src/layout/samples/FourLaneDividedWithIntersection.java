@@ -25,6 +25,7 @@ public class FourLaneDividedWithIntersection {
          *                 b
          *                 a
          *                 5
+         *  10 a         b   11 a         b
          */
 
         RoadPoint rp1 = new RoadPoint(0.0,0.0,0.0,0.0,-1.0,0.0);
