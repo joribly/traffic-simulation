@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Transition {
 
-    private static boolean debug=false;
+    private static boolean debug=true;
 
     private final Map<RoadSegment, RoadSegmentConnection> roadSegmentConnectionMap;
     private RoadSegmentConnection previousRoadSegmentConnection;
@@ -96,7 +96,6 @@ public class Transition {
         List<Lane>resultLaneList = new ArrayList<Lane>();
         int laneIndex= laneList.indexOf(lane);
         int mateCheckIndex = getMateIndexForLane(laneList, laneIndex, mateLaneList, direction);
-
         if(mateCheckIndex >= 0) {
             int testCheckIndex, laneCheckIndex=laneIndex;
             resultLaneList.add(mateLaneList.get(mateCheckIndex));
@@ -104,7 +103,7 @@ public class Transition {
 
                 if(laneIndex == 0) { // innermost, pick up all left turn lanes and 1st straight  lane
                     testCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.ALL);
-                    if(mateLaneList.get(mateCheckIndex).canGoStraight())break;
+                    if(laneList.size() > 1 && mateLaneList.get(mateCheckIndex).canGoStraight())break;
                 }
                 else {
                     testCheckIndex = getNextLaneIndex(mateLaneList, mateCheckIndex, Direction.STRAIGHT, Direction.RIGHT);
