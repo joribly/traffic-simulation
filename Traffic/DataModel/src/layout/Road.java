@@ -10,6 +10,7 @@ public class Road {
     private LinkedHashMap<String, RoadSegment> roadSegmentMap;
     private LinkedList<Transition> transitions;
     private RoadSegment lastRoadSegment;
+    private String  lastName;
 
     public Road(String name) {
         roadSegmentMap = new LinkedHashMap<String,RoadSegment>();
@@ -22,13 +23,15 @@ public class Road {
         if(roadSegmentMap.size() > transitions.size()) {
             // add internal transition
             Transition transition = new Transition("T: " + lastRoadSegment.getId() + " -> " + roadSegment.getId());
-            transition.addRoadSegment(lastRoadSegment, End.B);
-            transition.addRoadSegment(roadSegment, End.A);
-            transition.mate(lastRoadSegment, roadSegment);
             transitions.add(transition);
+        }
+        if(lastRoadSegment != null){
+            Transition transition = transitions.getLast();
+            transitions.getLast().mate(lastRoadSegment, roadSegment);
         }
         roadSegmentMap.put(name, roadSegment);
         lastRoadSegment = roadSegment;
+        lastName = name;
         return this;
     }
 

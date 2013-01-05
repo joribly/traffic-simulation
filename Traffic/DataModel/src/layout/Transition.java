@@ -6,28 +6,23 @@ import java.util.*;
 
 public class Transition {
 
-    private static boolean debug=true;
+    private static boolean debug=false;
 
     private final Map<RoadSegment, RoadSegmentConnection> roadSegmentConnectionMap;
     private RoadSegmentConnection previousRoadSegmentConnection;
     private RoadSegmentConnection firstRoadSegmentConnection;
     private String name;
     private ArrayList<Choice>choices;
+    private ArrayList<RoadSegmentConnection>roadSegmentConnectionPairs;
+    private boolean connectionsOrdered;
 
 
     public Transition(String name) {
         roadSegmentConnectionMap = new LinkedHashMap<RoadSegment, RoadSegmentConnection>();
         choices = new ArrayList<Choice>();
+        roadSegmentConnectionPairs = new ArrayList<RoadSegmentConnection>();
         firstRoadSegmentConnection = previousRoadSegmentConnection = null;
         this.name = name;
-    }
-
-    public Transition addRoadSegment(RoadSegment roadSegment, End end) {
-        roadSegment.setEndTransition(end, this);
-        RoadSegmentConnection roadSegmentConnection = new RoadSegmentConnection(roadSegment, end);
-        roadSegmentConnectionMap.put(roadSegment, roadSegmentConnection);
-        doubleLinkRoadSegmentConnection(roadSegmentConnection);
-        return this;
     }
 
     private void doubleLinkRoadSegmentConnection(RoadSegmentConnection roadSegmentConnection) {
@@ -51,6 +46,8 @@ public class Transition {
     }
 
     public void mate(RoadSegment roadSegment1, RoadSegment roadSegment2){
+        addRoadSegmentToPairings(roadSegment1, End.B);
+        addRoadSegmentToPairings(roadSegment2, End.A);
         RoadSegmentConnection connection1 = getConnection(roadSegment1);
         RoadSegmentConnection connection2 = getConnection(roadSegment2);
         if(connection1 != null && connection2 != null) {
@@ -58,6 +55,24 @@ public class Transition {
             connection2.setMate(connection1);
         }
     }
+
+    private Transition addRoadSegmentToPairings(RoadSegment roadSegment, End end) {
+        roadSegment.setEndTransition(end, this);
+        RoadSegmentConnection roadSegmentConnection = new RoadSegmentConnection(roadSegment, end);
+        roadSegmentConnectionMap.put(roadSegment, roadSegmentConnection);
+        roadSegmentConnectionPairs.add(roadSegmentConnection);
+        return this;
+    }
+
+    private void orderConnections() {
+        for(int j=0; j <= 1; j++) {
+           for(int i=j; i<roadSegmentConnectionPairs.size(); i+=2) {
+              doubleLinkRoadSegmentConnection(roadSegmentConnectionPairs.get(i));
+           }
+        }
+        connectionsOrdered = true;
+    }
+
 
     public RoadSegment getMateRoadSegment(RoadSegment roadSegment) {
         return getConnection(roadSegment).getMate().getRoadSegment();
@@ -182,6 +197,9 @@ public class Transition {
     }
 
     public void defineLaneConnections() {
+        if(!connectionsOrdered) {
+            orderConnections();
+        }
         End end,turnEnd;
         List<Lane>enteringLaneList,straightLaneList,leftTurnLaneList,rightTurnLaneList,uTurnLaneList;
         for(RoadSegment roadSegment : roadSegmentConnectionMap.keySet()) {
