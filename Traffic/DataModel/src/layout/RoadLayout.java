@@ -14,7 +14,7 @@ public enum RoadLayout {
             Lane.createStandardTo(1).setCanGoStraight()
     ),
     ONE_LANE_FROM(0.0,
-            Lane.createStandardFrom(1).setCanGoStraight()
+            Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft()
     ),
     TWO_LANE_STD(0.0,
             Lane.createStandardFrom(1).setCanGoStraight().setCanGoLeft().setCanGoRight(),

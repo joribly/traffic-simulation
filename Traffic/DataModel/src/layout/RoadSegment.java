@@ -84,17 +84,24 @@ public class RoadSegment {
     }
 
     public void plot() {
-        double [] xy1;
-        double [] xy2;
-        for(Lane lane: layout.getLaneList(Travel.FROM)){
-            xy1 = getLaneEndXYLocation(lane, End.A);
-            xy2 = getLaneEndXYLocation(lane, End.B);
-            Plot.line(xy1, xy2, lane.getColor());
+        for(Lane lane: layout.getLaneList(Travel.FROM)) {
+            plotLane(lane);
         }
-        for(Lane lane: layout.getLaneList(Travel.TO)){
-            xy1 = getLaneEndXYLocation(lane, End.A);
-            xy2 = getLaneEndXYLocation(lane, End.B);
-            Plot.line(xy1, xy2, lane.getColor());
+        for(Lane lane: layout.getLaneList(Travel.TO)) {
+            plotLane(lane);
         }
+    }
+
+    private void plotLane(Lane lane) {
+        double [] xy1 = null, xy2 = null;
+        double offset = layout.getLaneCenterPointOffset(lane);
+        for(RoadPoint roadPoint: pointList) {
+            xy2 = roadPoint.getXYLocation(offset);
+            if(xy1 != null) {
+                Plot.line(xy1, xy2, lane.getColor());
+            }
+            xy1 = xy2;
+        }
+
     }
 }

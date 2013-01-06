@@ -31,9 +31,13 @@ public class FourLaneDividedWithIntersection {
         RoadPoint rp1 = new RoadPoint(0.0,0.0,0.0,0.0,-1.0,0.0);
         RoadPoint rp2 = rp1.dX(40.0).dY(-50.0).dA(90.0);
         RoadPoint rp3 = rp1.dY(-40.0);
+        RoadPoint rp4 = rp3.dX(65);
+        RoadPoint rp5 = rp4.dA(90.0).dY(5.0);
+        RoadPoint rp6 = rp5.dA(-90.0).dX(-10.0).dY(2);
 
         Transition intersection = new Transition("Broad and Lee");
         Transition southIntersection = new Transition("South and Lee");
+        Transition oneWaySplitIntersection = new Transition("One Way Split");
 
         Road leeHighway = new Road("Lee Highway")
                 .addNewSegment(
@@ -88,12 +92,29 @@ public class FourLaneDividedWithIntersection {
                 .addNewSegment(
                         "southEast",
                         RoadLayout.TWO_LANE_STD,
-                        rp3.dX(50.0), rp3.dX(80));
+                        rp3.dX(50.0), rp4, rp4.dA(30.0), rp4.dA(60.0), rp4.dA(90.0), rp5)
+                .addTransition(oneWaySplitIntersection)
+                .addNewSegment(
+                        "southEastDeadEnd",
+                        RoadLayout.DEAD_END,
+                        rp5.dY(2.0));
+
+        Road toSouthFromWestOneWay = new Road("one-way-east")
+                .addNewSegment(
+                        "a",
+                        RoadLayout.ONE_LANE_FROM,
+                        rp6, rp6.dX(10.0))
+                .addTransition(oneWaySplitIntersection)
+                .addNewSegment(
+                        "b",
+                        RoadLayout.ONE_LANE_FROM,
+                        rp6.dX(14.0), rp6.dX(22.0));
 
         broadStreet.defineTransitionLaneConnections();
         leeHighway.defineTransitionLaneConnections();
         southStreet.defineTransitionLaneConnections();
+        toSouthFromWestOneWay.defineTransitionLaneConnections();
 
-        Plot.doIt(broadStreet, leeHighway, southStreet);
+        Plot.doIt(broadStreet, leeHighway, southStreet, toSouthFromWestOneWay);
     }
 }
