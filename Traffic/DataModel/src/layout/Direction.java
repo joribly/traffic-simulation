@@ -1,8 +1,19 @@
 package layout;
 
 public enum Direction {
-    LEFT,
-    STRAIGHT,
-    RIGHT,
-    ALL
+    LEFT("L-Turn"),
+    STRAIGHT("Straight"),
+    RIGHT("R-Turn"),
+    U("U-Turn"),
+    ALL("All");
+
+    private String debugInfo;
+
+    Direction(String debugInfo) {
+        this.debugInfo = debugInfo;
+    }
+
+    public String getDebugInfo() {
+        return debugInfo;
+    }
 }

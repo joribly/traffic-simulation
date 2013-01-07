@@ -106,6 +106,9 @@ public class Transition {
     }
 
     public List<Lane> getPossibleLaneList(RoadSegment roadSegment, Lane lane, RoadSegment mateRoadSegment, Direction direction) {
+        if(direction == Direction.U) {
+            return roadSegment.getUTurnLaneList(lane.getTravel());
+        }
         List<Lane>laneList = roadSegment.getLaneList(lane.getTravel());
         List<Lane>mateLaneList = getLeavingLaneList(mateRoadSegment);
         List<Lane>resultLaneList = new ArrayList<Lane>();
@@ -200,53 +203,50 @@ public class Transition {
         if(!connectionsOrdered) {
             orderConnections();
         }
-        End end,turnEnd;
-        List<Lane>enteringLaneList,straightLaneList,leftTurnLaneList,rightTurnLaneList,uTurnLaneList;
         for(RoadSegment roadSegment : roadSegmentConnectionMap.keySet()) {
-            if(debug==true)System.out.println("\n" + roadSegment);
-            end = getEnd(roadSegment);
-            enteringLaneList = getEnteringLaneList(roadSegment);
-            for(Lane enteringLane: enteringLaneList) {
-               if(roadSegmentLaneHasChoices(roadSegment, enteringLane)) {
-                   RoadSegment turnRoadSegment, mateRoadSegment = getMateRoadSegment(roadSegment);
-                   if(enteringLane.canGoLeft()) {
-                       if(enteringLane.isInner()) {
-                           uTurnLaneList = roadSegment.getUTurnLaneList(enteringLane.getTravel());
-                           for(Lane uTurnLane: uTurnLaneList) {
-                               if(debug==true)System.out.println("lane " + enteringLane.getId() + ": U-Turn   to roadSegment " + roadSegment.getId() + " lane " + uTurnLane + " (end=" + end + ")");
-                           }
-                       }
-                       turnRoadSegment = roadSegment;
-                       while((turnRoadSegment = nextRoadSegment(turnRoadSegment)) != mateRoadSegment)  {
-                           turnEnd = getEnd(turnRoadSegment);
-                           leftTurnLaneList = getPossibleLaneList(roadSegment, enteringLane, turnRoadSegment, Direction.LEFT);
-                           for(Lane leftTurnLane: leftTurnLaneList) {
-                               if(debug==true)System.out.println("lane " + enteringLane.getId() + ": L-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + leftTurnLane + " (end=" + turnEnd + ")");
-                               choices.add(new Choice(roadSegment, enteringLane, end, turnRoadSegment, leftTurnLane, turnEnd));
-                           }
-                       }
-                   }
-                   if(enteringLane.canGoStraight()) {
-                       straightLaneList = getPossibleLaneList(roadSegment, enteringLane, getMateRoadSegment(roadSegment), Direction.STRAIGHT);
-                       End mateEnd = getEnd(mateRoadSegment);
-                       for(Lane straightLane: straightLaneList) {
-                           if(debug==true)System.out.println("lane " + enteringLane.getId() + ": Straight to roadSegment " + mateRoadSegment.getId() + " lane " + straightLane + " (end=" +  mateEnd + ")");
-                           choices.add(new Choice(roadSegment, enteringLane, end, getMateRoadSegment(roadSegment), straightLane, mateEnd));
-                       }
-                   }
-                   if(enteringLane.canGoRight()) {
-                       turnRoadSegment = roadSegment;
-                       while((turnRoadSegment = previousRoadSegment(turnRoadSegment)) != mateRoadSegment)  {
-                           turnEnd = getEnd(turnRoadSegment);
-                           rightTurnLaneList = getPossibleLaneList(roadSegment, enteringLane, turnRoadSegment, Direction.RIGHT);
-                           for(Lane rightTurnLane: rightTurnLaneList) {
-                               if(debug==true)System.out.println("lane " + enteringLane.getId() + ": R-turn   to roadSegment " + turnRoadSegment.getId() + " lane " + rightTurnLane + " (end=" + turnEnd + ")");
-                               choices.add(new Choice(roadSegment, enteringLane, end, turnRoadSegment, rightTurnLane, turnEnd));
-                           }
-                       }
-                   }
-               }
+            defineConnectionsForRoadSegment(roadSegment);
+        }
+    }
+    private void defineConnectionsForRoadSegment(RoadSegment roadSegment)  {
+        List<Lane>enteringLaneList;
+        if(debug==true)System.out.println("\n" + roadSegment);
+        enteringLaneList = getEnteringLaneList(roadSegment);
+        for(Lane enteringLane: enteringLaneList) {
+            if(roadSegmentLaneHasChoices(roadSegment, enteringLane)) {
+                defineConnectionsForRoadSegmentLane(roadSegment, enteringLane);
             }
+        }
+    }
+    private void defineConnectionsForRoadSegmentLane(RoadSegment roadSegment, Lane lane) {
+        RoadSegment connectionRoadSegment, mateRoadSegment = getMateRoadSegment(roadSegment);
+        if(lane.canGoLeft()) {
+            if(lane.isInner()) {
+                addToChoices(Direction.U, roadSegment, lane, roadSegment);
+            }
+            connectionRoadSegment = roadSegment;
+            while((connectionRoadSegment = nextRoadSegment(connectionRoadSegment)) != mateRoadSegment)  {
+                addToChoices(Direction.LEFT, roadSegment, lane, connectionRoadSegment);
+            }
+        }
+        if(lane.canGoStraight()) {
+            addToChoices(Direction.STRAIGHT, roadSegment, lane, mateRoadSegment);
+        }
+        if(lane.canGoRight()) {
+            connectionRoadSegment = roadSegment;
+            while((connectionRoadSegment = previousRoadSegment(connectionRoadSegment)) != mateRoadSegment)  {
+                addToChoices(Direction.RIGHT, roadSegment, lane, connectionRoadSegment);
+            }
+        }
+    }
+
+    private void addToChoices(Direction direction, RoadSegment roadSegment, Lane lane, RoadSegment connectionRoadSegment) {
+        End end = getEnd(roadSegment);
+        End connectionEnd = getEnd(connectionRoadSegment);
+        List<Lane>connectionLaneList = getPossibleLaneList(roadSegment, lane, connectionRoadSegment, direction);
+        String debugInfo = direction.getDebugInfo();
+        for(Lane connectionLane: connectionLaneList) {
+            if(debug==true)System.out.println("lane " + lane.getId() + ": " + debugInfo + " to roadSegment " + connectionRoadSegment.getId() + " lane " + connectionLane + " (end=" + connectionEnd + ")");
+            if(!debugInfo.startsWith("U"))choices.add(new Choice(roadSegment, lane, end, connectionRoadSegment, connectionLane, connectionEnd));
         }
     }
 
